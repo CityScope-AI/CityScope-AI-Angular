@@ -1,0 +1,40 @@
+<app-header></app-header>
+<div class="dashboard-body">
+  <p-splitter
+  [minSizes]="[12,50]"
+  [panelSizes]="[10, 80]"
+  styleClass="mb-5">
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+            <app-sidebar></app-sidebar>
+        </div>
+    </ng-template>
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+          <p-tabView>
+            <p-tabPanel
+            header="Demographics"
+            icon="pi pi-sign-out">
+              <iframe [src]="iframeSrc" style="width: 100%; height: 500px; border: none;"></iframe>
+          </p-tabPanel>
+            <p-tabPanel header="Heat Maps">
+                <app-heatmap-page></app-heatmap-page>
+            </p-tabPanel>
+            <p-tabPanel header="Enrollment Predictor">
+                <p>
+                    At vero eos et accusamus et iusto odio dignissimos...
+                </p>
+            </p-tabPanel>
+            <p-tabPanel header="Data Tables">
+              <p>
+                  At vero eos et accusamus et iusto odio dignissimos...
+              </p>
+          </p-tabPanel>
+          <p-tabPanel header="Settings">
+            <app-settings-page></app-settings-page>
+          </p-tabPanel>
+        </p-tabView>
+        </div>
+    </ng-template>
+  </p-splitter>
+</div>

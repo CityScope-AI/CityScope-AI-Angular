@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+.header-card .p-card .p-card-body {
+  padding: 0;
+}
+
+.header-card .p-card{
+  border-radius: 0;
+}
+
+.header-card .p-card .p-card-content {
+  padding: 0.4rem 0;
+}
+
+.title .p-image{
+  border-radius: 12px;
+}
+
+.mb-5.p-splitter.p-component.p-splitter-horizontal {
+    height: 100vh;
+}
+.p-tabview-nav {
+  display: inline-flex;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+
+
+.p-tabview .p-tabview-nav li {
+  margin-right: 0;
+  margin-top: 2px;
+}
+.login-button {
+  padding-right: 1.2rem;
+}
+
+.login-button .p-button {
+  color: white;
+  border: 1px solid #042453;
+  background-color: #042453;
+  opacity: 0; /* Hidden initially */
+  animation: fadeIn 1.0s ease-in-out forwards;
+
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.p-button:hover {
+  border: 1px solid #818cf8;
+}
+
+.theme-switch .p-inputswitch {
+  width: 6rem;
+  height: 3.5rem;
+
+  transform: scale(0.65); /* Scale down to 80% */
+}
+
+.theme-switch .p-inputswitch-slider::before {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: -1.8rem;
+  left: 0.1rem;
+  background: transparent;
+  font-size: 2.5rem;
+  content: "☀️";
+}
+.theme-switch .p-inputswitch-checked .p-inputswitch-slider::before {
+  content: "🌑";
+  transform: translateX(2.3rem);
+}
+
+.p-splitter-panel-nested {
+  display: flow;
+  min-width: 0;
+}

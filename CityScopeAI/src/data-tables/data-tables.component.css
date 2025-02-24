@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  display: block;
+}
+
+.buttons {
+  display: flex;
+
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  max-height: 400px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

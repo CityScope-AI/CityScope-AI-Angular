@@ -12,23 +12,16 @@
     <ng-template pTemplate>
         <div class="col flex align-items-center justify-content-center">
           <p-tabView>
+            <p-tabPanel header="Heat Maps">
+              <app-heatmap-page></app-heatmap-page>
+          </p-tabPanel>
             <p-tabPanel
             header="Demographics"
             icon="pi pi-sign-out">
               <iframe [src]="iframeSrc" style="width: 100%; height: 500px; border: none;"></iframe>
           </p-tabPanel>
-            <p-tabPanel header="Heat Maps">
-                <app-heatmap-page></app-heatmap-page>
-            </p-tabPanel>
-            <p-tabPanel header="Enrollment Predictor">
-                <p>
-                    At vero eos et accusamus et iusto odio dignissimos...
-                </p>
-            </p-tabPanel>
             <p-tabPanel header="Data Tables">
-              <p>
-                  At vero eos et accusamus et iusto odio dignissimos...
-              </p>
+              <app-data-tables></app-data-tables>
           </p-tabPanel>
           <p-tabPanel header="Settings">
             <app-settings-page></app-settings-page>

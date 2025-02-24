@@ -12,6 +12,7 @@ import { HeatmapPageComponent } from "../heatmap/heatmap-page.component";
 import { IframeService } from '../services/iframe.service';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DataTablesComponent } from "../data-tables/data-tables.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +26,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     TabViewModule,
     SettingsPageComponent,
     HeatmapPageComponent,
-    ButtonModule
+    ButtonModule,
+    DataTablesComponent
 ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']

@@ -1,0 +1,43 @@
+<div class="container">
+  <h3>Enrollment and Demographics Data</h3>
+
+  <div class="buttons">
+    <!-- Dropdown for selecting filter -->
+    <p-dropdown
+      [options]="filters"
+      [(ngModel)]="selectedFilter"
+      optionLabel="name"
+      placeholder="Select a Filter">
+    </p-dropdown>
+
+    <!-- Search bar; triggers filtering on each keystroke -->
+    <input
+    pInputText
+      type="text"
+      [(ngModel)]="searchValue"
+      (input)="applyFilter()"
+      placeholder="Enter search text..."
+      style="margin-bottom: 1rem;"
+    />
+    <p-button (click)="showPieChart()">Show Pie Chart</p-button>
+  </div>
+
+
+  <div class="table-wrapper">
+    <table id="dataTable" border="1">
+      <thead>
+        <tr>
+          <th>City</th>
+          <th>State</th>
+          <th>Zip Code</th>
+          <th>Term</th>
+          <th>Population</th>
+          <th>Income</th>
+          <th>Bachelor Degree</th>
+          <th>Median Age</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>

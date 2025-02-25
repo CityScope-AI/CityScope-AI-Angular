@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { HeatmapComponent } from "./heatmap/heatmap.component";
 import { VoronoiMapComponent } from "./voronoi-map/voronoi-map.component"; // ✅ Ensure Basemap is imported
 import { CommonModule } from '@angular/common';
+import { ZipcodeMapComponent } from "./zipcode-map/zipcode-map.component";
 @Component({
   selector: 'app-heatmap-page',
   standalone: true,
@@ -12,7 +13,8 @@ import { CommonModule } from '@angular/common';
     ButtonModule,
     HeatmapComponent,
     VoronoiMapComponent,
-    CommonModule
+    CommonModule,
+    ZipcodeMapComponent
 ],
   templateUrl: './heatmap-page.component.html',
   styleUrl: './heatmap-page.component.css'

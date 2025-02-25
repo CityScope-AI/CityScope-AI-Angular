@@ -3,9 +3,14 @@
 
   <p-dropdown placeholder="Select Basemap"></p-dropdown>
 
-  <button pButton pRipple (click)="resetMap()">Reset Map</button>
+  <p-dropdown
+    [options]="maps"
+    [(ngModel)]="selectedMap"
+    optionLabel="name"
+    placeholder="Select a Map"
+    (onChange)="onMapChange()"/> <!-- ✅ Added event to detect dropdown change -->
 
-  <button pButton pRipple (click)="switchMap()">Switch Map</button>
+    <button pButton pRipple (click)="resetMap()">Reset Map</button>
 </div>
 
 <!-- Conditional Rendering of Maps -->
@@ -14,6 +19,9 @@
 </div>
 
 <div id="voronoiView" *ngIf="activeMap === 'voronoi'" style="height: 500px; width: 100%;">
-  <!-- <app-voronoi-map></app-voronoi-map> -->
-   <app-zipcode-map></app-zipcode-map>
+  <app-voronoi-map></app-voronoi-map>
+</div>
+
+<div id="zipcodeView" *ngIf="activeMap === 'zipcode'" style="height: 500px; width: 100%;">
+  <app-zipcode-map></app-zipcode-map>
 </div>

@@ -6,6 +6,22 @@
   border-radius: 1rem;
 
 }
+#voronoiView {
+  width: 100%;
+  height: 500px; /* Set a fixed height */
+  max-height: 500px; /* Prevent it from exceeding limits */
+  overflow: hidden; /* Prevent layout resizing due to overflow */
+  border-radius: 1rem;
+
+}
+#zipcodeView{
+  width: 100%;
+  height: 500px; /* Set a fixed height */
+  max-height: 500px; /* Prevent it from exceeding limits */
+  overflow: hidden; /* Prevent layout resizing due to overflow */
+  border-radius: 1rem;
+
+}
 .controls {
   display: flex;
   flex-direction: row;

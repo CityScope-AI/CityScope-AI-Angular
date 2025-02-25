@@ -4,25 +4,25 @@ import MapView from '@arcgis/core/views/MapView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
-import Point from '@arcgis/core/geometry/Point';
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import Basemap from '@arcgis/core/Basemap';
-import { zipCodeData } from '../../assets/data/ZipCodeData'; // Your zip code data
+import { zipCodeData } from '../../assets/data/ZipCodeData'; // <-- Update path if needed
 import { voronoi } from 'd3-voronoi'; // Use d3-voronoi to generate the polygons
 import Color from '@arcgis/core/Color';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
-import Field from '@arcgis/core/layers/support/Field';
+import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
 
 @Component({
   selector: 'app-voronoi-map',
   standalone: true,
   imports: [],
   templateUrl: './voronoi-map.component.html',
-  styleUrl: './voronoi-map.component.css',
+  styleUrls: ['./voronoi-map.component.css']
 })
 export class VoronoiMapComponent implements AfterViewInit, OnDestroy {
   private mapView!: MapView;
-  featureLayer!: FeatureLayer;
-  baseMap = 'streets';
+  private featureLayer!: FeatureLayer;
+  private baseMap = 'streets';
 
   basemapOptions = [
     { label: 'Streets', value: 'streets' },
@@ -34,9 +34,14 @@ export class VoronoiMapComponent implements AfterViewInit, OnDestroy {
     { label: 'National Geographic', value: 'national-geographic' },
   ];
 
-  ngAfterViewInit(): void {
+  /**
+   * Make ngAfterViewInit async so we can await loading the US boundary
+   */
+  async ngAfterViewInit(): Promise<void> {
+    // 1) Create the WebMap
     const webmap = new WebMap({ basemap: this.baseMap });
 
+    // 2) Create the MapView
     this.mapView = new MapView({
       container: 'voronoiView',
       map: webmap,
@@ -44,9 +49,13 @@ export class VoronoiMapComponent implements AfterViewInit, OnDestroy {
       center: [-117.201757, 34.872701],
     });
 
-    // Generate Voronoi polygons
-    const voronoiPolygons = this.generateVoronoiPolygons();
+    // 3) Load the U.S. boundary geometry
+    const usBoundaryGeometry = await this.loadUSBoundaryGeometries();
 
+    // 4) Generate & clip Voronoi polygons by the US boundary
+    const voronoiPolygons = this.generateClippedVoronoiPolygons(usBoundaryGeometry);
+
+    // 5) Create a FeatureLayer from the clipped polygons
     this.featureLayer = new FeatureLayer({
       source: voronoiPolygons,
       objectIdField: 'ObjectID',
@@ -65,46 +74,118 @@ export class VoronoiMapComponent implements AfterViewInit, OnDestroy {
     });
 
     webmap.add(this.featureLayer);
+
+    // 6) Optionally, zoom to the US boundary
+    // if (usBoundaryGeometry.extent) {
+    //   this.mapView.goTo(usBoundaryGeometry.extent);
+    // }
   }
 
-  generateVoronoiPolygons(): Graphic[] {
-    const points: [number, number][] = zipCodeData
-  .filter(entry => entry.LNG !== null && entry.LAT !== null)
-  .map(entry => [entry.LNG as number, entry.LAT as number]); // Ensure tuples
-
-  // Calculate bounding box for the data points
-  const minLng = Math.min(...points.map(([lng]) => lng));
-  const maxLng = Math.max(...points.map(([lng]) => lng));
-  const minLat = Math.min(...points.map(([, lat]) => lat));
-  const maxLat = Math.max(...points.map(([, lat]) => lat));
-
-const voronoiDiagram = voronoi()
-  .extent([[minLng, minLat], [maxLng, maxLat]]) // Define bounding box
-  .polygons(points);
-
-    return voronoiDiagram.map((polygon: number[][], index: number) => {
-      return new Graphic({
-        geometry: new Polygon({
-          rings: [polygon],
-          spatialReference: { wkid: 4326 },
-        }),
-        attributes: {
-          ObjectID: index,
-          Zip_Code: zipCodeData[index].Zip_Code,
-          Count: zipCodeData[index].Count,
-        },
-      });
+ /**
+ * Loads a GeoJSONLayer for the US boundary and returns the geometry of all features.
+ * Adjust the "url" path to your actual US boundary file.
+ */
+private async loadUSBoundaryGeometries(): Promise<Polygon[]> {
+    const usLayer = new GeoJSONLayer({
+        // <-- Update this path if your GeoJSON is in a different location
+        url: '../../assets/data/us-states.geojson',
     });
-  }
 
-  createVoronoiRenderer(): UniqueValueRenderer {
+    await usLayer.load();
+
+    // Query all features in the boundary file
+    const queryResult = await usLayer.queryFeatures();
+    if (queryResult.features.length === 0) {
+        throw new Error('No features found in US boundary GeoJSON.');
+    }
+
+    // Return all geometries as an array of Polygons
+    return queryResult.features.map(feature => feature.geometry as Polygon);
+}
+
+
+  /**
+   * Generates Voronoi polygons from zipCodeData and intersects each
+   * polygon with the US boundary to ensure they stay within the US.
+   */
+  private generateClippedVoronoiPolygons(usBoundary: Polygon[]): Graphic[] {
+    // 1) Create [lng, lat] arrays from the zipCodeData
+    const points: [number, number][] = zipCodeData
+        .filter(entry => entry.LNG !== null && entry.LAT !== null)
+        .map(entry => [entry.LNG as number, entry.LAT as number]);
+
+    if (points.length === 0) {
+        return [];
+    }
+
+    // 2) Determine bounding box (min/max lat/lng)
+    const minLng = Math.min(...points.map(([lng]) => lng));
+    const maxLng = Math.max(...points.map(([lng]) => lng));
+    const minLat = Math.min(...points.map(([, lat]) => lat));
+    const maxLat = Math.max(...points.map(([, lat]) => lat));
+
+    // 3) Create Voronoi polygons via d3-voronoi
+    const voronoiDiagram = voronoi()
+        .extent([[minLng, minLat], [maxLng, maxLat]])
+        .polygons(points);
+
+    // 4) Build ArcGIS Graphics, clipped to US boundary
+    const clippedGraphics: Graphic[] = voronoiDiagram
+        .map((polygon: number[][], index: number) => {
+            // Convert to an ArcGIS Polygon
+            const fullPoly = new Polygon({
+                rings: [polygon],
+                spatialReference: { wkid: 4326 },
+            });
+
+            // Intersect with US boundary
+            const clippedGeometries = usBoundary
+                .filter(polygon => polygon instanceof Polygon) // ✅ Ensure only Polygons are used
+                .map((polygon) => geometryEngine.intersect(fullPoly, polygon) as Polygon)
+                .filter((geom): geom is Polygon => geom !== null); // ✅ Type guard to filter out null intersections
+
+            // ✅ If no intersections, return null (to be filtered out later)
+            if (clippedGeometries.length === 0) {
+                return null;
+            }
+
+            // ✅ Combine all polygons using union with an array
+const combinedGeometry = clippedGeometries.length > 1
+? geometryEngine.union(clippedGeometries) as Polygon // <-- Pass array directly
+: clippedGeometries[0]; // Use single polygon if only one
+
+
+            return new Graphic({
+                geometry: combinedGeometry, // ✅ Use single Polygon (not an array)
+                attributes: {
+                    ObjectID: index,
+                    Zip_Code: zipCodeData[index]?.Zip_Code || '', // ✅ Optional chaining
+                    Count: zipCodeData[index]?.Count || 0,
+                },
+            });
+        })
+        .filter((graphic): graphic is Graphic => graphic !== null); // ✅ Filter removes null values
+
+    return clippedGraphics; // ✅ Return final array of Graphics
+}
+
+
+  /**
+   * Creates a renderer to color each Voronoi polygon uniquely based on its Zip_Code.
+   */
+  private createVoronoiRenderer(): UniqueValueRenderer {
     return new UniqueValueRenderer({
       field: 'Zip_Code',
       uniqueValueInfos: zipCodeData.map((entry) => ({
         value: entry.Zip_Code,
         symbol: {
           type: 'simple-fill',
-          color: new Color([Math.random() * 255, Math.random() * 255, Math.random() * 255, 0.5]),
+          color: new Color([
+            Math.random() * 255,
+            Math.random() * 255,
+            Math.random() * 255,
+            0.5
+          ]),
           outline: {
             color: 'black',
             width: 1,
@@ -114,10 +195,16 @@ const voronoiDiagram = voronoi()
     });
   }
 
+  /**
+   * Updates the basemap on user selection (streets, satellite, etc.)
+   */
   updateBasemap(): void {
     this.mapView.map.basemap = Basemap.fromId(this.baseMap);
   }
 
+  /**
+   * Clean up the MapView when the component is destroyed.
+   */
   ngOnDestroy(): void {
     if (this.mapView) {
       this.mapView.destroy();

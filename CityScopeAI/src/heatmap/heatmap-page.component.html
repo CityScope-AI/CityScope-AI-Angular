@@ -22,6 +22,10 @@
   <app-voronoi-map></app-voronoi-map>
 </div>
 
-<div id="zipcodeView" *ngIf="activeMap === 'zipcode'" style="height: 500px; width: 100%;">
+<div id="zipcodeView" *ngIf="activeMap === 'zipcodes'" style="height: 500px; width: 100%;">
   <app-zipcode-map></app-zipcode-map>
+</div>
+
+<div id="statesView" *ngIf="activeMap === 'states'" style="height: 500px; width: 100%;">
+  <app-state-map></app-state-map>
 </div>

@@ -6,6 +6,7 @@ import { HeatmapComponent } from "./heatmap/heatmap.component";
 import { VoronoiMapComponent } from "./voronoi-map/voronoi-map.component"; // ✅ Ensure Basemap is imported
 import { CommonModule } from '@angular/common';
 import { ZipcodeMapComponent } from "./zipcode-map/zipcode-map.component";
+import { StateMapComponent } from "./state-map/state-map.component";
 
 interface Map {
   name: string;
@@ -20,7 +21,8 @@ interface Map {
     VoronoiMapComponent,
     CommonModule,
     ZipcodeMapComponent,
-    FormsModule
+    FormsModule,
+    StateMapComponent
 ],
   templateUrl: './heatmap-page.component.html',
   styleUrl: './heatmap-page.component.css'
@@ -34,17 +36,19 @@ export class HeatmapPageComponent implements OnInit{
     this.maps = [
         { name: 'heatmap'},
         { name: 'voronoi'},
-        { name: 'zipcode'},
+        { name: 'zipcodes'},
+        { name: 'states'},
+
     ];
 }
 
 
-activeMap: 'heatmap' | 'voronoi' | 'zipcode' = 'heatmap'; // ✅ Added 'zipcode' as an option
+activeMap: 'heatmap' | 'voronoi' | 'zipcodes' | 'states' = 'heatmap'; // ✅ Added 'zipcode' as an option
 
    // ✅ Called when user selects a map from the dropdown
    onMapChange(): void {
     if (this.selectedMap) {
-      this.activeMap = this.selectedMap.name as 'heatmap' | 'voronoi' | 'zipcode';
+      this.activeMap = this.selectedMap.name as 'heatmap' | 'voronoi' | 'zipcodes' | 'states';
     }
   }
 

@@ -6,16 +6,16 @@ import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import Basemap from '@arcgis/core/Basemap';
-import { zipCodeData } from '../../assets/data/ZipCodeData'; // <-- Update path if needed
+import { zipCodeData } from '../../../../assets/data/ZipCodeData';
 import { voronoi } from 'd3-voronoi'; // Use d3-voronoi to generate the polygons
 import Color from '@arcgis/core/Color';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
 
-import { BasemapService } from './../../services/basemap.service';
+import { BasemapService } from '../../../../services/basemap.service';
 import { Subscription } from 'rxjs';
-import { Map } from '../../app/models/map.model';
-import { BaseMapOption } from '../../app/models/basemap.model';
+import { Map } from '../../../models/map.model';
+import { BaseMapOption } from '../../../models/basemap.model';
 
 
 @Component({

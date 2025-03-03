@@ -1,7 +1,12 @@
 <div class="controls">
   <p-dropdown placeholder="Select Color Scheme"></p-dropdown>
 
-  <p-dropdown placeholder="Select Basemap"></p-dropdown>
+  <p-dropdown
+    [options]="basemaps"
+    [(ngModel)]="selectedBasemap"
+    placeholder="Select Basemap"
+    (onChange)="onBasemapChange()">
+  </p-dropdown>
 
   <p-dropdown
     [options]="maps"

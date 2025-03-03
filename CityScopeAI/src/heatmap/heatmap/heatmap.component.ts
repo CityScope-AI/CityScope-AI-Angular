@@ -1,4 +1,3 @@
-import { DropdownModule } from 'primeng/dropdown';
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
@@ -8,21 +7,43 @@ import Search from '@arcgis/core/widgets/Search';
 import Legend from '@arcgis/core/widgets/Legend';
 import Expand from '@arcgis/core/widgets/Expand';
 import Graphic from '@arcgis/core/Graphic';
-import { ButtonModule } from 'primeng/button';
 import { zipCodeData } from '../../assets/data/ZipCodeData'; // Replace with the path to your zip code data
 import Point from '@arcgis/core/geometry/Point'; // Import Point explicitly
 import Basemap from '@arcgis/core/Basemap'; // ✅ Ensure Basemap is imported
-
-
+import { BasemapService } from './../../services/basemap.service';
+import { Subscription } from 'rxjs';
+import { Map } from '../../app/models/map.model';
+import { BaseMapOption } from '../../app/models/basemap.model';
 @Component({
   selector: 'app-heatmap',
   standalone: true,
-  imports: [],
+  imports: [
+  ],
   templateUrl: './heatmap.component.html',
   styleUrl: './heatmap.component.css'
 })
 
 export class HeatmapComponent implements AfterViewInit, OnDestroy {
+  private basemapSubscription!: Subscription;
+  map!: Map;
+  basemaps: BaseMapOption[] = []; // ✅ Use the imported Map interface
+  basemap: string = ''; // Default
+
+
+  constructor(private basemapService: BasemapService) {}
+
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    if (this.basemapSubscription) {
+      this.basemapSubscription.unsubscribe(); // ✅ Prevent memory leaks
+    }
+    if (this.mapView) {
+      this.mapView.destroy();
+    }
+  }
+
   switchMap() {
   throw new Error('Method not implemented.');
   }
@@ -51,8 +72,8 @@ export class HeatmapComponent implements AfterViewInit, OnDestroy {
     ];
 
     ngAfterViewInit(): void {
+      console.log("Initializing Heatmap with basemap:", this.baseMap);
       const webmap = new WebMap({ basemap: this.baseMap });
-
       this.mapView = new MapView({
         container: 'heatmapView',
         map: webmap,
@@ -62,6 +83,11 @@ export class HeatmapComponent implements AfterViewInit, OnDestroy {
           dockEnabled: false,
           // autoOpenEnabled: true,
         },
+      });
+       // ✅ Subscribe to BasemapService AFTER initializing the map
+      this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
+        this.basemap = basemap;
+        this.updateBasemap();
       });
 
       this.featureLayer = new FeatureLayer({
@@ -161,8 +187,11 @@ export class HeatmapComponent implements AfterViewInit, OnDestroy {
 
 
     updateBasemap(): void {
-      this.mapView.map.basemap = Basemap.fromId(this.baseMap); // Correct way to set basemap
+      if (this.mapView) {
+        this.mapView.map.basemap = Basemap.fromId(this.basemap);
+      }
     }
+
 
     resetDefaults(): void {
       this.colorScheme = 'Red';
@@ -170,12 +199,6 @@ export class HeatmapComponent implements AfterViewInit, OnDestroy {
       this.blurRadius = 15;
       this.maxPixelIntensity = 250;
       this.updateHeatmapRenderer();
-    }
-
-    ngOnDestroy(): void {
-      if (this.mapView) {
-        this.mapView.destroy();
-      }
     }
   }
 

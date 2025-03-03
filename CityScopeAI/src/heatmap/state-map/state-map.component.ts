@@ -6,22 +6,55 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
 
+import { BasemapService } from './../../services/basemap.service';
+import { Subscription } from 'rxjs';
+import { Map } from '../../app/models/map.model';
+import { BaseMapOption } from '../../app/models/basemap.model';
+import Basemap from '@arcgis/core/Basemap';
 
 @Component({
   selector: 'app-state-map',
   standalone: true,
-  imports: [
-
-  ],
+  imports: [],
   templateUrl: './state-map.component.html',
   styleUrl: './state-map.component.css'
 })
 export class StateMapComponent {
   private mapView!: MapView;
 
+  private basemapSubscription!: Subscription;
+  map!: Map;
+  basemaps: BaseMapOption[] = []; // ✅ Use the imported Map interface
+  basemap: string = ''; // Default
+
+  constructor(private basemapService: BasemapService) {}
+
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    if (this.basemapSubscription) {
+      this.basemapSubscription.unsubscribe(); // ✅ Prevent memory leaks
+    }
+    if (this.mapView) {
+      this.mapView.destroy();
+    }
+  }
+  updateBasemap(): void {
+    if (this.mapView) {
+      this.mapView.map.basemap = Basemap.fromId(this.basemap);
+    }
+  }
+
   ngAfterViewInit(): void {
     // 1) Create the WebMap
     const webmap = new WebMap({ basemap: 'streets-vector' });
+
+     // ✅ Subscribe to BasemapService AFTER initializing the map
+     this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
+      this.basemap = basemap;
+      this.updateBasemap();
+    });
 
     // 2) Create the MapView
     this.mapView = new MapView({
@@ -65,11 +98,4 @@ export class StateMapComponent {
       }),
     });
   }
-
-  ngOnDestroy(): void {
-    if (this.mapView) {
-      this.mapView.destroy();
-    }
-  }
-
 }

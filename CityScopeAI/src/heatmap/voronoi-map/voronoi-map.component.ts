@@ -12,6 +12,12 @@ import Color from '@arcgis/core/Color';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
 
+import { BasemapService } from './../../services/basemap.service';
+import { Subscription } from 'rxjs';
+import { Map } from '../../app/models/map.model';
+import { BaseMapOption } from '../../app/models/basemap.model';
+
+
 @Component({
   selector: 'app-voronoi-map',
   standalone: true,
@@ -24,6 +30,17 @@ export class VoronoiMapComponent implements AfterViewInit, OnDestroy {
   private featureLayer!: FeatureLayer;
   private baseMap = 'streets';
 
+  private basemapSubscription!: Subscription;
+  map!: Map;
+  basemaps: BaseMapOption[] = []; // ✅ Use the imported Map interface
+  basemap: string = ''; // Default
+
+  constructor(private basemapService: BasemapService) {}
+
+
+  ngOnInit(): void {
+  }
+
   basemapOptions = [
     { label: 'Streets', value: 'streets' },
     { label: 'Satellite', value: 'satellite' },
@@ -34,12 +51,32 @@ export class VoronoiMapComponent implements AfterViewInit, OnDestroy {
     { label: 'National Geographic', value: 'national-geographic' },
   ];
 
+  ngOnDestroy(): void {
+    if (this.basemapSubscription) {
+      this.basemapSubscription.unsubscribe(); // ✅ Prevent memory leaks
+    }
+    if (this.mapView) {
+      this.mapView.destroy();
+    }
+  }
+  updateBasemap(): void {
+    if (this.mapView) {
+      this.mapView.map.basemap = Basemap.fromId(this.basemap);
+    }
+  }
+
   /**
    * Make ngAfterViewInit async so we can await loading the US boundary
    */
   async ngAfterViewInit(): Promise<void> {
     // 1) Create the WebMap
     const webmap = new WebMap({ basemap: this.baseMap });
+
+    // ✅ Subscribe to BasemapService AFTER initializing the map
+    this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
+      this.basemap = basemap;
+      this.updateBasemap();
+    });
 
     // 2) Create the MapView
     this.mapView = new MapView({
@@ -193,21 +230,5 @@ const combinedGeometry = clippedGeometries.length > 1
         },
       })),
     });
-  }
-
-  /**
-   * Updates the basemap on user selection (streets, satellite, etc.)
-   */
-  updateBasemap(): void {
-    this.mapView.map.basemap = Basemap.fromId(this.baseMap);
-  }
-
-  /**
-   * Clean up the MapView when the component is destroyed.
-   */
-  ngOnDestroy(): void {
-    if (this.mapView) {
-      this.mapView.destroy();
-    }
   }
 }

@@ -75,9 +75,14 @@ activeMap: 'heatmap' | 'voronoi' | 'zipcodes' | 'states' = 'heatmap'; // ✅ Add
   }
 
   resetMap(): void {
-    this.activeMap = 'heatmap';
-    this.selectedMap = this.maps[0];
+    const previousMap = this.activeMap; // ✅ Store the current map selection
+    this.activeMap = null as any; // ✅ Temporarily set to null to trigger a full re-render
+
+    setTimeout(() => {
+      this.activeMap = previousMap; // ✅ Restore the previous map selection
+    }, 0); // ✅ Forces Angular to detect changes
   }
+
 
   activeBasemap: string = 'streets-vector';
 

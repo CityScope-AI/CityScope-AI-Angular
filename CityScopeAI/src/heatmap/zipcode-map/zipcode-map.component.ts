@@ -25,11 +25,15 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
   private basemapSubscription!: Subscription;
   map!: Map;
   basemaps: BaseMapOption[] = []; // ✅ Use the imported Map interface
-  basemap: string = ''; // Default
+  basemap: string = 'streets-vector'; // Default
 
   constructor(private basemapService: BasemapService) {}
 
   ngOnInit(): void {
+    this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
+      this.basemap = basemap;
+      this.updateBasemap();
+    });
   }
 
   ngOnDestroy(): void {
@@ -41,14 +45,14 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
     }
   }
   updateBasemap(): void {
-    if (this.mapView) {
-      this.mapView.map.basemap = Basemap.fromId(this.basemap);
+    if (this.mapView && this.mapView.map) {
+      this.mapView.map.basemap = Basemap.fromId(this.basemap); // ✅ Convert string to Basemap object
     }
   }
 
   ngAfterViewInit(): void {
     // 1) Create the WebMap
-    const webmap = new WebMap({ basemap: 'streets-vector' });
+    const webmap = new WebMap({ basemap: Basemap.fromId(this.basemap) });
 
     // ✅ Subscribe to BasemapService AFTER initializing the map
     this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {

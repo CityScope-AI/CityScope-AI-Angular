@@ -60,7 +60,6 @@ export class HeatmapPageComponent implements OnInit{
       { name: 'gray-vector', label: 'Gray' },
       { name: 'dark-gray-vector', label: 'Dark Gray' },
       { name: 'oceans', label: 'Oceans' },
-      { name: 'national-geographic', label: 'National Geographic' },
       { name: 'terrain', label: 'Terrain' }
     ];
 }

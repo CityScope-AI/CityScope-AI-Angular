@@ -9,7 +9,7 @@ import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ImageModule } from 'primeng/image';
 
-import { FirebaseService } from '../firebase.service';
+import { FirebaseService } from '../services/firebase.service';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 @Component({

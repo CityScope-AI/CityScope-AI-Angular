@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
-import { environment } from './environments/environment';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',

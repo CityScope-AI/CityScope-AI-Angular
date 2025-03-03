@@ -487,7 +487,7 @@ def update_graph(selected_dimension, selected_feature, feature_range, selected_c
             x=x_data[:len(filtered_cbu_data)],
             y=y_data[:len(filtered_cbu_data)],
             mode='markers+text',
-            marker=dict(size=10, color='blue', opacity=0.8),
+            marker=dict(size=10, color='rgb(0, 213, 240)', opacity=0.8), 
             text=filtered_cbu_data['Zip_Code'],
             hoverinfo='text',
             hovertext=cbu_hover_info,
@@ -498,7 +498,8 @@ def update_graph(selected_dimension, selected_feature, feature_range, selected_c
             x=x_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)],
             y=y_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)],
             mode='markers+text',
-            marker=dict(size=10, color='yellow', opacity=0.8),
+            marker=dict(size=10, color='rgb(235,216,1)', opacity=0.8),
+
             text=filtered_non_cbu_data['Zip_Code'],
             hoverinfo='text',
             hovertext=non_cbu_hover_info,

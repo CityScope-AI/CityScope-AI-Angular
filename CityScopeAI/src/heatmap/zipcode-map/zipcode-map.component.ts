@@ -11,6 +11,12 @@ import { Map } from '../../app/models/map.model';
 import { BaseMapOption } from '../../app/models/basemap.model';
 import Basemap from '@arcgis/core/Basemap';
 import { HttpClient } from '@angular/common/http';
+import Extent from '@arcgis/core/geometry/Extent';
+import TimeExtent from '@arcgis/core/TimeExtent';
+import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
+import FeatureEffect from '@arcgis/core/layers/support/FeatureEffect';
+
+
 
 
 interface SimilarZip {
@@ -121,32 +127,35 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
 
     this.mapView.on('click', (event) => {
       this.mapView.hitTest(event).then((response) => {
-        console.log('Hit test response:', response);
-    
-        const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
-    
-        if (feature?.graphic) {
-          console.log('Graphic object:', feature.graphic);
-          console.log('Graphic attributes:', feature.graphic.attributes);
-    
-          // Safely access the attribute
-          const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
-          console.log('Selected ZIP Code:', selectedZipCode);
-    
-          const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
-          console.log('Fetched zip data:', zipData);
-    
-          if (zipData) {
-            const similarZips = zipData.similar_zips;
-            console.log('Similar ZIP Codes:', similarZips);
+          console.log('Hit test response:', response);
+  
+          const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
+  
+          if (feature?.graphic) {
+              console.log('Graphic object:', feature.graphic);
+              console.log('Graphic attributes:', feature.graphic.attributes);
+  
+              const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
+              console.log('Selected ZIP Code:', selectedZipCode);
+  
+              const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
+              console.log('Fetched zip data:', zipData);
+  
+              if (zipData) {
+                  const similarZips = zipData.similar_zips;
+                  console.log('Similar ZIP Codes:', similarZips);
+  
+                  // ✅ Call the highlight function with the selected ZIP Code
+                  this.highlightSimilarZipCodes(selectedZipCode);
+              } else {
+                  console.warn(`No similar zip codes found for ${selectedZipCode}`);
+              }
           } else {
-            console.warn(`No similar zip codes found for ${selectedZipCode}`);
+              console.warn('No graphic found in hit test response.');
           }
-        } else {
-          console.warn('No graphic found in hit test response.');
-        }
       });
-    });
+  });
+  
     
     
     
@@ -160,34 +169,38 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
 
     const similarZipCodes = zipData.similar_zips.map((zip) => zip.zip_code);
 
-    this.zipCodeLayer.renderer = new SimpleRenderer({
-        symbol: new SimpleFillSymbol({
-            color: new Color([0, 92, 230, 0.4]), // Default blue fill
-            outline: {
-                color: '#000000',
-                width: 0.5,
-            },
-        }),
-        visualVariables: [
-            {
-                type: 'color',
-                field: 'ZCTA5CE10',
-                stops: [
-                    {
-                        value: Number(selectedZipCode), // Convert to number
-                        color: new Color([255, 0, 0, 0.6]), // Red for the selected zip code
-                    },
-                    ...similarZipCodes.map((zip) => ({
-                        value: Number(zip), // Convert to number
-                        color: new Color([0, 255, 0, 0.6]), // Green for similar zip codes
-                    })),
-                ],
-            } as __esri.ColorVariableProperties,
-        ],
-    });
+    console.log('Highlighting ZIP Code:', selectedZipCode);
+    console.log('Similar ZIP Codes to highlight:', similarZipCodes);
 
-    this.mapView.goTo({ target: this.zipCodeLayer.fullExtent, zoom: 6 });
+    // Create a SQL WHERE clause to highlight only the selected and similar zip codes
+    const zipCodesToHighlight = [selectedZipCode, ...similarZipCodes].map(zip => `'${zip}'`).join(',');
+    
+    this.zipCodeLayer.featureEffect = new FeatureEffect({
+        filter: new FeatureFilter({
+            where: `ZCTA5CE10 IN (${[selectedZipCode, ...similarZipCodes].map(zip => `'${zip}'`).join(',')})`,
+            geometry: this.mapView.extent ?? new Extent({
+                xmin: -180,
+                ymin: -90,
+                xmax: 180,
+                ymax: 90,
+                spatialReference: { wkid: 4326 }
+            }),
+            spatialRelationship: 'intersects',
+            distance: 0,
+            objectIds: [],
+            timeExtent: new TimeExtent({ start: new Date(0), end: new Date(0) }),
+            units: 'meters'
+        }),
+        excludedEffect: 'opacity(30%)',
+        includedEffect: 'opacity(100%)',
+        excludedLabelsVisible: false,
+    });
+    
+    
+
+    this.mapView.goTo({ target: this.zipCodeLayer.fullExtent, zoom: 6 }, { animate: false });
 }
+
 
 
   private getZipCodeRenderer(): SimpleRenderer {

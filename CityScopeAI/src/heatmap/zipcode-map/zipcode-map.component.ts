@@ -5,102 +5,200 @@ import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
-
 import { BasemapService } from './../../services/basemap.service';
 import { Subscription } from 'rxjs';
 import { Map } from '../../app/models/map.model';
 import { BaseMapOption } from '../../app/models/basemap.model';
 import Basemap from '@arcgis/core/Basemap';
+import { HttpClient } from '@angular/common/http';
+
+
+interface SimilarZip {
+  zip_code: string;
+  population: number;
+  median_income: number;
+  similarity: number;
+}
+
+interface ZipSimilarityData {
+  zip_code: string;
+  count: number;
+  similar_zips: SimilarZip[];
+}
 
 @Component({
   selector: 'app-zipcode-map',
   standalone: true,
-  imports: [],
   templateUrl: './zipcode-map.component.html',
-  styleUrl: './zipcode-map.component.css'
+  styleUrls: ['./zipcode-map.component.css'],
 })
 export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
   private mapView!: MapView;
+  private zipCodeLayer!: GeoJSONLayer;
 
   private basemapSubscription!: Subscription;
   map!: Map;
-  basemaps: BaseMapOption[] = []; // ✅ Use the imported Map interface
-  basemap: string = 'streets-vector'; // Default
+  basemaps: BaseMapOption[] = [];
+  basemap: string = 'streets-vector';
 
-  constructor(private basemapService: BasemapService) {}
+  private zipSimilarityData: ZipSimilarityData[] = [];
+
+  constructor(private basemapService: BasemapService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
       this.basemap = basemap;
       this.updateBasemap();
     });
+
+    this.loadZipSimilarityData();
   }
 
   ngOnDestroy(): void {
     if (this.basemapSubscription) {
-      this.basemapSubscription.unsubscribe(); // ✅ Prevent memory leaks
+      this.basemapSubscription.unsubscribe();
     }
     if (this.mapView) {
       this.mapView.destroy();
     }
   }
+
+  private loadZipSimilarityData(): void {
+    const jsonPath = 'assets/data/zip_code_similarities.json';
+    this.http.get<ZipSimilarityData[]>(jsonPath).subscribe(
+      (data) => {
+        this.zipSimilarityData = data;
+        console.log('Similarity data loaded', data);
+      },
+      (error) => {
+        console.error('Error loading zip code similarities:', error);
+      }
+    );
+  }
+
   updateBasemap(): void {
     if (this.mapView && this.mapView.map) {
-      this.mapView.map.basemap = Basemap.fromId(this.basemap); // ✅ Convert string to Basemap object
+      this.mapView.map.basemap = Basemap.fromId(this.basemap);
     }
   }
 
   ngAfterViewInit(): void {
-    // 1) Create the WebMap
     const webmap = new WebMap({ basemap: Basemap.fromId(this.basemap) });
 
-    // ✅ Subscribe to BasemapService AFTER initializing the map
     this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
       this.basemap = basemap;
       this.updateBasemap();
     });
 
-    // 2) Create the MapView
     this.mapView = new MapView({
-      container: 'zipcodeMapView', // Must match the div id in HTML
+      container: 'zipcodeMapView',
       map: webmap,
       zoom: 4,
-      center: [-98.5795, 39.8283], // Center of the US
+      center: [-98.5795, 39.8283],
     });
 
-    // 3) Load GeoJSON Layer
-    const zipCodeLayer = new GeoJSONLayer({
-      url: '../../assets/data/zip-codes.geojson', // <-- Update with the actual path
+    this.zipCodeLayer = new GeoJSONLayer({
+      url: 'assets/data/zip-codes.geojson',
       renderer: this.getZipCodeRenderer(),
+      outFields: ['ZCTA5CE10', 'STATEFP10', 'GEOID10', 'ALAND10', 'AWATER10'], // ✅ Add all relevant fields here
       popupTemplate: {
-        title: 'ZIP Code: {ZCTA5CE10}',
-        content: `
-          <b>State FIPS Code:</b> {STATEFP10}<br>
-          <b>Geographic ID:</b> {GEOID10}<br>
-          <b>Land Area:</b> {ALAND10} m²<br>
-          <b>Water Area:</b> {AWATER10} m²
-        `,
+          title: 'ZIP Code: {ZCTA5CE10}',
+          content: `
+            <b>State FIPS Code:</b> {STATEFP10}<br>
+            <b>Geographic ID:</b> {GEOID10}<br>
+            <b>Land Area:</b> {ALAND10} m²<br>
+            <b>Water Area:</b> {AWATER10} m²
+          `,
       },
+  });
+  
+
+    webmap.add(this.zipCodeLayer);
+
+    this.zipCodeLayer.when(() => {
+      this.mapView.goTo(this.zipCodeLayer.fullExtent);
     });
 
-    webmap.add(zipCodeLayer);
-
-    // 4) Zoom to layer once loaded
-    zipCodeLayer.when(() => {
-      this.mapView.goTo(zipCodeLayer.fullExtent);
+    this.mapView.on('click', (event) => {
+      this.mapView.hitTest(event).then((response) => {
+        console.log('Hit test response:', response);
+    
+        const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
+    
+        if (feature?.graphic) {
+          console.log('Graphic object:', feature.graphic);
+          console.log('Graphic attributes:', feature.graphic.attributes);
+    
+          // Safely access the attribute
+          const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
+          console.log('Selected ZIP Code:', selectedZipCode);
+    
+          const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
+          console.log('Fetched zip data:', zipData);
+    
+          if (zipData) {
+            const similarZips = zipData.similar_zips;
+            console.log('Similar ZIP Codes:', similarZips);
+          } else {
+            console.warn(`No similar zip codes found for ${selectedZipCode}`);
+          }
+        } else {
+          console.warn('No graphic found in hit test response.');
+        }
+      });
     });
+    
+    
+    
+    
+    
   }
 
-  // ✅ Simple renderer to visualize ZIP code boundaries
-  private getZipCodeRenderer(): SimpleRenderer {
-    return new SimpleRenderer({
+  private highlightSimilarZipCodes(selectedZipCode: string): void {
+    const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
+    if (!zipData) return;
+
+    const similarZipCodes = zipData.similar_zips.map((zip) => zip.zip_code);
+
+    this.zipCodeLayer.renderer = new SimpleRenderer({
         symbol: new SimpleFillSymbol({
-            color: new Color([0, 92, 230, 0.4]), // ✅ Blue fill with transparency
+            color: new Color([0, 92, 230, 0.4]), // Default blue fill
             outline: {
                 color: '#000000',
                 width: 0.5,
             },
         }),
+        visualVariables: [
+            {
+                type: 'color',
+                field: 'ZCTA5CE10',
+                stops: [
+                    {
+                        value: Number(selectedZipCode), // Convert to number
+                        color: new Color([255, 0, 0, 0.6]), // Red for the selected zip code
+                    },
+                    ...similarZipCodes.map((zip) => ({
+                        value: Number(zip), // Convert to number
+                        color: new Color([0, 255, 0, 0.6]), // Green for similar zip codes
+                    })),
+                ],
+            } as __esri.ColorVariableProperties,
+        ],
+    });
+
+    this.mapView.goTo({ target: this.zipCodeLayer.fullExtent, zoom: 6 });
+}
+
+
+  private getZipCodeRenderer(): SimpleRenderer {
+    return new SimpleRenderer({
+      symbol: new SimpleFillSymbol({
+        color: new Color([0, 92, 230, 0.4]),
+        outline: {
+          color: '#000000',
+          width: 0.5,
+        },
+      }),
     });
   }
 }

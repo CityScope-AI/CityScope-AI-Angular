@@ -4,9 +4,9 @@
 # Date Created: 2024-09-13
 #
 # Description: This Dash app connects to a MySQL database to retrieve demographic data
-#              from the 'census_zipcode_demographics_2022' table. It performs t-SNE
-#              dimensionality reduction on the data and creates a 3D visualization
-#              using Plotly. The visualization shows CBU ZIP codes in light blue and
+#              from the 'census_zipcode_demographics_2022' table. It performs t-SNE 
+#              dimensionality reduction on the data and creates a 3D visualization 
+#              using Plotly. The visualization shows CBU ZIP codes in light blue and 
 #              the 50 most demographically similar non-CBU ZIP codes in yellow.
 #
 # Usage: Run this Dash app to generate the 3D t-SNE plot. Ensure the environment
@@ -22,8 +22,51 @@ from sklearn.manifold import TSNE
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-from dash import Dash, dcc, html
+from dash import Dash, dcc, html, dash
 from dash.dependencies import Input, Output, State
+
+import os
+import requests
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv(".env.local")
+API_KEY = os.getenv("TOGETHER_AI_KEY")
+
+def generate_similarity_explanation(zip1, zip2, zip1_data, zip2_data):
+    """
+    Generate an LLM-powered similarity explanation between two ZIP codes.
+    """
+    API_URL = "https://api.together.xyz/v1/completions"
+
+    prompt = f"""
+    Compare ZIP Code {zip1} and ZIP Code {zip2} in a detailed paragraph.
+    - Population: {zip1} has {zip1_data['Population']}, while {zip2} has {zip2_data['Population']}.
+    - Median Income: {zip1_data['Median_Income']} vs. {zip2_data['Median_Income']}.
+    - Bachelor's Degree Holders: {zip1_data['Bachelor_Degree']}% vs. {zip2_data['Bachelor_Degree']}%.
+    - Unemployment Rate: {zip1_data['Unemployment']}% vs. {zip2_data['Unemployment']}%.
+    - Median Home Value: {zip1_data['Median_Home_Value']} vs. {zip2_data['Median_Home_Value']}.
+    - Ethnic Composition:
+    - White Alone: {zip1_data['White_Alone']}% vs. {zip2_data['White_Alone']}%.
+    - Black Alone: {zip1_data['Black_Alone']}% vs. {zip2_data['Black_Alone']}%.
+    - Hispanic or Latino: {zip1_data['Hispanic_Latino']}% vs. {zip2_data['Hispanic_Latino']}%.
+
+    Summarize the similarities and differences in one paragraph. Do not hallucinate about where we got this data from.
+    """
+
+    payload = {
+        "model": "mistralai/Mistral-7B-Instruct-v0.1",
+        "prompt": prompt.strip(),
+        "max_tokens": 250,
+        "temperature": 0.3
+    }
+
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+    response = requests.post(API_URL, headers=headers, json=payload)
+    if response.status_code == 200:
+        return response.json()["choices"][0]["text"].strip()
+    return "Explanation unavailable due to API error."
 
 # Load data from the CSV file
 csv_file_path = './src/assets/data/census_zipcode_percentages.csv'
@@ -163,19 +206,19 @@ app.layout = html.Div([
         # Sidebar with filter options
         html.Div([
             html.Button("☰", id="toggle-button", n_clicks=0, style={
-                'position': 'absolute',
-                'top': '10px',
+                'position': 'absolute', 
+                'top': '10px', 
                 'left': '10px',
-                'font-size': '24px',
-                'cursor': 'pointer',
-                'background-color': 'lightgray',
+                'font-size': '24px', 
+                'cursor': 'pointer', 
+                'background-color': 'lightgray', 
                 'z-index': '2',
             }),
 
             html.Div([
-
-
+                # Adding margin-top using wrapper Div
                 html.Div([
+                    # Demographic Dimension Dropdown
                     html.Label("Select Demographic Dimension:"),
                     dcc.Dropdown(
                         id='dimension-dropdown',
@@ -188,58 +231,73 @@ app.layout = html.Div([
                         ],
                         value='generalized'  # Default value
                     )
-                ], style={'margin-top': '3vw'}),  # Adjust spacing as needed
-                html.Div([
-                    html.Label("Select Feature to Filter By:"),
-                    dcc.Dropdown(
-                        id='feature-dropdown',
-                        options=[
-                            {'label': 'Population', 'value': 'Population'},
-                            {'label': 'Median Income', 'value': 'Median_Income'},
-                            {'label': 'Education (Bachelors)', 'value': 'Bachelor_Degree'},
-                            {'label': 'Unemployment', 'value': 'Unemployment'},
-                            {'label': 'Median Home Value', 'value': 'Median_Home_Value'}
-                        ],
-                        value='Population'  # Default value
-                    )
-                ], style={'margin-top': '1vw'}),  # Add spacing above the dropdown
+                ], style={'margin-top': '3vw'}),  # Add spacing above the dropdown
 
                 html.Div([
-                    html.Label(id='slider-label', children="Filter by Population Range:"),
-                    dcc.RangeSlider(
-                        id='feature-slider',
-                        min=0,  # Replace with dynamic min value
-                        max=1000000,  # Replace with dynamic max value
-                        step=1000,
-                        marks={int(i): str(int(i)) for i in np.linspace(0, 1000000, num=10)},
-                        value=[0, 1000000]
-                    )
-                ], style={'margin-top': '1vw'}),  # Add spacing above the slider
+                    html.Div([
+                        html.Label("Select Feature to Filter By:"),
+                        dcc.Dropdown(
+                            id='feature-dropdown',
+                            options=[
+                                {'label': 'Population', 'value': 'Population'},
+                                {'label': 'Median Income', 'value': 'Median_Income'},
+                                {'label': 'Education (Bachelors)', 'value': 'Bachelor_Degree'},
+                                {'label': 'Unemployment', 'value': 'Unemployment'},
+                                {'label': 'Median Home Value', 'value': 'Median_Home_Value'}
+                            ],
+                            value='Population'  # Default value
+                        )
+                    ], style={'margin-top': '1vw'}),  # Add spacing above the dropdown
 
-                html.Div(id='portfolio-section', children="No ZIP code selected.", style={
+                    html.Div([
+                        html.Label(id='slider-label', children="Filter by Population Range:"),
+                        dcc.RangeSlider(
+                            id='feature-slider',
+                            min=0,  # Replace with dynamic min value
+                            max=1000000,  # Replace with dynamic max value
+                            step=0.1,
+                            marks={int(i): str(int(i)) for i in np.linspace(0, 1000000, num=10)},
+                            value=[0, 1000000]
+                        )
+                    ], style={'margin-top': '1vw'}),  # Add spacing above the slider
+
+                    html.Div([
+                        html.Label("Select a CBU ZIP Code:"),
+                        dcc.Dropdown(
+                            id='cbu-zipcode-dropdown',
+                            options=[{'label': 'Show All (Top 50)', 'value': 'all'}] + 
+                                    [{'label': zipcode, 'value': zipcode} for zipcode in cbu_zipcodes],
+                            value='all',  # Default selection
+                            placeholder="Choose a CBU ZIP Code",
+                            style={'margin-bottom': '1vw'}
+                        )
+                    ], style={'margin-top': '2vw'}),    
+
+                    
+                    html.Div(id='portfolio-section', children="No ZIP code selected.", style={
                         'margin-top': '1vw',
                         'padding': '10px',
                         'border': '1px solid #ccc',
                         'background-color': '#f8f9fa'
                     }),
-
+                ])
             ], id="sidebar", style={
-                'width': '250px',
-                'height': '100%',
+                'width': '15vw', 
+                'height': '100%', 
                 'position': 'absolute',
-                'top': '0',
-                'left': '-250px',
+                'top': '0', 
+                'left': '-250px', 
                 'background-color': '#f8f9fa',
-                'padding': '10px',
-                'transition': '0.3s',
-                'z-index': '1',
+                'padding': '10px', 
+                'transition': '0.3s', 
+                'z-index': '1', 
                 'overflow': 'auto'
-            }),
+            })
         ]),
 
         # Main content (Graph)
         html.Div([
-            dcc.Graph(id='tsne-plot', figure=create_3d_plot(cbu_coords, non_cbu_coords), style={'height': '90vh'})
+            dcc.Graph(id='tsne-plot', style={'height': '75vh', 'width': '100%'})
         ], id='graph-container', style={'position': 'relative', 'padding-left': '10px'})
     ])
 ])
@@ -260,13 +318,13 @@ california_data = merged_data[merged_data['Mailing State/Province'] == 'CA']
 
 @app.callback(
     Output('portfolio-section', 'children'),
-    [Input('tsne-plot', 'clickData')]
+    [Input('tsne-plot', 'clickData'),
+     Input('cbu-zipcode-dropdown', 'value')]  # Capture selected CBU ZIP
 )
-def update_portfolio(click_data):
+def update_portfolio(click_data, selected_cbu_zip):
     if not click_data:
         return "No ZIP code selected."
 
-    # Extract ZIP code from clickData
     selected_zip = click_data['points'][0]['text']
     filtered_data = california_data[california_data['Zip_Code'] == selected_zip]
 
@@ -281,43 +339,74 @@ def update_portfolio(click_data):
     city_name = zip_profile['Mailing City']
     city_population = california_data[california_data['Mailing City'] == city_name]['Population'].sum()
 
-
-    # retrieve city URL
+    # Retrieve city image URL
     city_image_row = city_images_df[city_images_df['City'].str.lower() == city_name.lower()]
     image_url = city_image_row['Image_URL'].values[0] if not city_image_row.empty else None
 
+    # Initialize `closest_cbu_zip`
+    closest_cbu_zip = None
+    closest_cbu_data = None
+
+    # ✅ **Force selected CBU ZIP if one is chosen**
+    if selected_cbu_zip != "all" and selected_cbu_zip in cbu_zipcodes:
+        closest_cbu_zip = selected_cbu_zip
+        closest_cbu_data = cbu_census_data[cbu_census_data['Zip_Code'] == closest_cbu_zip]
+
+    else:
+        # 🔍 **Find the closest CBU ZIP dynamically if none is selected**
+        selected_zip_data = non_cbu_census_data[non_cbu_census_data['Zip_Code'] == selected_zip]
+        if not selected_zip_data.empty:
+            try:
+                closest_idx = np.argmin(euclidean_distances(
+                    selected_zip_data[features], cbu_census_data[features]
+                ))
+                closest_cbu_zip = cbu_census_data.iloc[closest_idx]['Zip_Code']
+                closest_cbu_data = cbu_census_data[cbu_census_data['Zip_Code'] == closest_cbu_zip]
+            except ValueError:
+                closest_cbu_zip = None
+                closest_cbu_data = None
+
+    # Construct Portfolio Content
     portfolio_content = [
-        html.H3(f"Profile for ZIP Code: {zip_profile['Zip_Code']}")
+        html.H3(f"Profile for ZIP Code: {zip_profile['Zip_Code']}"),
     ]
 
     if image_url:
-        portfolio_content.append(
-            html.Img(src=image_url, style={'width': '100%', 'height': 'auto', 'margin-bottom': '10px'})
-        )
+        portfolio_content.append(html.Img(src=image_url, style={'width': '100%', 'height': 'auto', 'margin-bottom': '10px'}))
 
     portfolio_content.extend([
-            html.P(f"City: {city_name}"),
-            html.P(f"State: California (CA)"),
-            html.P(f"City Population: {city_population:,}"),
-            html.P(f"ZIP Code Population: {zip_profile['Population']:,}"),
-            html.P(f"Median Income: ${zip_profile['Median_Income']:,}"),
-            html.P(f"Median Age: {zip_profile['Median_Age']} years"),
-            html.P(f"Educational Attainment:"),
-            html.Ul([
-                html.Li(f"Bachelor's Degree: {zip_profile['Bachelor_Degree']*100:.1f}%"),
-                html.Li(f"Graduate/Professional Degree: {zip_profile['Graduate_Professional_Degree']*100:.1f}%"),
-            ]),
-            html.P(f"Ethnic Composition:"),
-            html.Ul([
-                html.Li(f"White Alone: {zip_profile['White_Alone']*100:.1f}%"),
-                html.Li(f"Black Alone: {zip_profile['Black_Alone']*100:.1f}%"),
-                html.Li(f"Hispanic or Latino: {zip_profile['Hispanic_Latino']*100:.1f}%"),
-            ]),
-            html.P(f"Median Home Value: ${zip_profile['Median_Home_Value']:,}"),
-            html.P(f"Median Gross Rent: ${zip_profile['Median_Gross_Rent']:,}")
-        ])
+        html.P(f"City: {city_name}"),
+        html.P(f"State: California (CA)"),
+        html.P(f"City Population: {city_population:,}"),
+        html.P(f"ZIP Code Population: {zip_profile['Population']:,}"),
+        html.P(f"Median Income: ${zip_profile['Median_Income']:,}"),
+        html.P(f"Median Age: {zip_profile['Median_Age']} years"),
+        html.P(f"Educational Attainment:"),
+        html.Ul([
+            html.Li(f"Bachelor's Degree: {zip_profile['Bachelor_Degree']*100:.1f}%"),
+            html.Li(f"Graduate/Professional Degree: {zip_profile['Graduate_Professional_Degree']*100:.1f}%"),
+        ]),
+        html.P(f"Ethnic Composition:"),
+        html.Ul([
+            html.Li(f"White Alone: {zip_profile['White_Alone']*100:.1f}%"),
+            html.Li(f"Black Alone: {zip_profile['Black_Alone']*100:.1f}%"),
+            html.Li(f"Hispanic or Latino: {zip_profile['Hispanic_Latino']*100:.1f}%"),
+        ]),
+        html.P(f"Median Home Value: ${zip_profile['Median_Home_Value']:,}"),
+        html.P(f"Median Gross Rent: ${zip_profile['Median_Gross_Rent']:,}"),
+    ])
+
+    # ✅ **Only generate LLM summary if a valid CBU ZIP is found**
+    if closest_cbu_zip:
+        llm_summary = generate_similarity_explanation(
+            closest_cbu_zip, selected_zip, closest_cbu_data.iloc[0], zip_profile
+        )
+
+        portfolio_content.append(html.H4(f"Comparison between {closest_cbu_zip}"))
+        portfolio_content.append(html.P(f"{llm_summary}"))
 
     return portfolio_content
+
 
 @app.callback(
     [Output('feature-slider', 'min'),
@@ -330,7 +419,7 @@ def update_portfolio(click_data):
 def update_slider(selected_feature):
     # Fields that are percentage-based
     percentage_fields = ['Bachelor_Degree', 'Unemployment']
-
+    
     # Format values in thousands for these fields
     fields_in_thousands = ['Population', 'Median_Income', 'Median_Home_Value']
 
@@ -353,72 +442,134 @@ def update_slider(selected_feature):
             marks = {int(i): str(int(i)) for i in np.linspace(min_val, max_val, num=10)}
 
         label = f" {selected_feature.replace('_', ' ')} (in thousands):"
-
+    
     return min_val, max_val, value, marks, label
 
-# Callback to update the graph based on the selected feature and slider range
+
 @app.callback(
     Output('tsne-plot', 'figure'),
-    [Input('dimension-dropdown', 'value'),  # New input for the dimension dropdown
+    [Input('dimension-dropdown', 'value'),
      Input('feature-dropdown', 'value'),
-     Input('feature-slider', 'value')]
+     Input('feature-slider', 'value'),
+     Input('cbu-zipcode-dropdown', 'value')]  # New: Selected CBU ZIP
 )
-def update_3d_graph(selected_dimension, selected_feature, feature_range):
+def update_3d_graph(selected_dimension, selected_feature, feature_range, selected_cbu_zip):
     # Default axis data and labels for Generalized (combined t-SNE components)
     x_data, y_data, z_data = combined_coords[:, 0], combined_coords[:, 1], combined_coords[:, 2]
     xaxis_title, yaxis_title, zaxis_title = 't-SNE Component 1', 't-SNE Component 2', 't-SNE Component 3'
 
-    # Update data and labels based on selected dimension
+    # Update axis labels & data based on selected dimension
     if selected_dimension == 'economic_prosperity':
-        x_data = census_data['Median_Income']
-        y_data = census_data['Median_Home_Value']
-        z_data = census_data['Population']
+        x_data, y_data, z_data = census_data['Median_Income'], census_data['Median_Home_Value'], census_data['Population']
         xaxis_title, yaxis_title, zaxis_title = 'Median Income', 'Median Home Value', 'Population'
     elif selected_dimension == 'educational_attainment':
-        x_data = census_data['Bachelor_Degree']
-        y_data = census_data['Graduate_Professional_Degree']
-        z_data = census_data['Unemployment']
+        x_data, y_data, z_data = census_data['Bachelor_Degree'], census_data['Graduate_Professional_Degree'], census_data['Unemployment']
         xaxis_title, yaxis_title, zaxis_title = 'Bachelor’s Degree %', 'Graduate Degree %', 'Unemployment Rate'
     elif selected_dimension == 'population_density':
-        x_data = census_data['Population']
-        y_data = census_data['Unemployment']
-        z_data = census_data['Median_Home_Value']
+        x_data, y_data, z_data = census_data['Population'], census_data['Unemployment'], census_data['Median_Home_Value']
         xaxis_title, yaxis_title, zaxis_title = 'Population', 'Unemployment Rate', 'Median Home Value'
     elif selected_dimension == 'ethnic_diversity':
-        x_data = census_data['Hispanic_Latino']
-        y_data = census_data['Black_Alone']
-        z_data = census_data['Population']
+        x_data, y_data, z_data = census_data['Hispanic_Latino'], census_data['Black_Alone'], census_data['Population']
         xaxis_title, yaxis_title, zaxis_title = 'Hispanic or Latino %', 'Black or African American %', 'Population'
 
+    # ✅ **Show All ZIPs (Default View)**
+    if selected_cbu_zip == 'all':
+        # Apply feature-based filtering
+        filtered_cbu_data = cbu_census_data[
+            (cbu_census_data[selected_feature] >= feature_range[0]) & 
+            (cbu_census_data[selected_feature] <= feature_range[1])
+        ]
+        filtered_non_cbu_data = top_50_non_cbu_census_data[
+            (top_50_non_cbu_census_data[selected_feature] >= feature_range[0]) & 
+            (top_50_non_cbu_census_data[selected_feature] <= feature_range[1])
+        ]
 
-    # Apply feature-based filtering
-    filtered_cbu_data = cbu_census_data[
-        (cbu_census_data[selected_feature] >= feature_range[0]) &
-        (cbu_census_data[selected_feature] <= feature_range[1])
-    ]
-    filtered_non_cbu_data = top_50_non_cbu_census_data[
-        (top_50_non_cbu_census_data[selected_feature] >= feature_range[0]) &
-        (top_50_non_cbu_census_data[selected_feature] <= feature_range[1])
-    ]
+        # Generate updated coordinates
+        filtered_cbu_coords = np.column_stack((x_data[:len(filtered_cbu_data)], 
+                                               y_data[:len(filtered_cbu_data)], 
+                                               z_data[:len(filtered_cbu_data)]))
+        filtered_non_cbu_coords = np.column_stack((x_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)], 
+                                                   y_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)], 
+                                                   z_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)]))
 
-    # Generate updated coordinates
-    filtered_cbu_coords = np.column_stack((x_data[:len(filtered_cbu_data)],
-                                           y_data[:len(filtered_cbu_data)],
-                                           z_data[:len(filtered_cbu_data)]))
-    filtered_non_cbu_coords = np.column_stack((x_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)],
-                                               y_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)],
-                                               z_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)]))
+        # Create plot with full dataset
+        figure = create_3d_plot(filtered_cbu_coords, filtered_non_cbu_coords)
+        figure.update_layout(scene=dict(xaxis_title=xaxis_title, yaxis_title=yaxis_title, zaxis_title=zaxis_title))
+        return figure
 
-        # Create the plot figure and update axis titles
-    figure = create_3d_plot(filtered_cbu_coords, filtered_non_cbu_coords)
-    figure.update_layout(
-        scene=dict(
-            xaxis_title=xaxis_title,
-            yaxis_title=yaxis_title,
-            zaxis_title=zaxis_title
-        )
-    )
-    return figure
+    # ✅ **Handle Selected CBU ZIP Code**
+    if selected_cbu_zip:
+        selected_cbu_data = cbu_census_data[cbu_census_data['Zip_Code'] == selected_cbu_zip]
+
+        if not selected_cbu_data.empty:
+            # Transform the selected ZIP into scaled space
+            selected_cbu_scaled = scaler.transform(selected_cbu_data[features])
+
+            # Find 10 closest non-CBU ZIPs based on Euclidean distance
+            distances_to_non_cbu = euclidean_distances(non_cbu_census_data_scaled, selected_cbu_scaled)
+            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:10]  # Top 10 closest non-CBU ZIPs
+            top_10_non_cbu_data = non_cbu_census_data.iloc[top_10_indices]
+
+            # Apply feature-based filtering to the selected top 10 ZIPs
+            top_10_non_cbu_data = top_10_non_cbu_data[
+                (top_10_non_cbu_data[selected_feature] >= feature_range[0]) &
+                (top_10_non_cbu_data[selected_feature] <= feature_range[1])
+            ]
+
+            # Combine the selected CBU ZIP and its top 10 similar non-CBU ZIPs
+            subset_data = pd.concat([selected_cbu_data, top_10_non_cbu_data])
+
+            # Dynamically recalculate t-SNE coordinates for the subset
+            subset_scaled = scaler.transform(subset_data[features])
+            n_samples = len(subset_scaled)
+            perplexity = min(5, max(1, n_samples // 3))  # Ensure perplexity < n_samples and > 0
+            tsne_subset = TSNE(n_components=3, random_state=42, perplexity=perplexity, learning_rate=100, init='random')
+            subset_coords = tsne_subset.fit_transform(subset_scaled)
+
+            # Assign new coordinates
+            cbu_coords = subset_coords[:1]  # First row is the selected ZIP
+            non_cbu_coords = subset_coords[1:]  # Remaining rows are the filtered non-CBU ZIPs
+
+            # Generate hover info
+            cbu_hover_info = generate_hover_info(selected_cbu_data)
+            non_cbu_hover_info = generate_hover_info(top_10_non_cbu_data)
+
+            trace_cbu = go.Scatter3d(
+                x=cbu_coords[:, 0],
+                y=cbu_coords[:, 1],
+                z=cbu_coords[:, 2],
+                mode='markers+text',
+                marker=dict(size=10, color='rgb(0, 213, 240)', opacity=0.8),
+                text=selected_cbu_data['Zip_Code'],
+                hoverinfo='text',
+                hovertext=cbu_hover_info,
+                name=f'Selected ZIP: {selected_cbu_zip}'
+            )
+
+            trace_non_cbu = go.Scatter3d(
+                x=non_cbu_coords[:, 0],
+                y=non_cbu_coords[:, 1],
+                z=non_cbu_coords[:, 2],
+                mode='markers+text',
+                marker=dict(size=10, color='rgb(235,216,1)', opacity=0.8),
+                text=top_10_non_cbu_data['Zip_Code'],
+                hoverinfo='text',
+                hovertext=non_cbu_hover_info,
+                name=f'Top 10 Similar to {selected_cbu_zip}'
+            )
+
+            layout = go.Layout(
+                scene=dict(xaxis_title=xaxis_title, yaxis_title=yaxis_title, zaxis_title=zaxis_title),
+                margin=dict(l=0, r=0, b=0, t=0),
+                autosize=True,
+                showlegend=True
+            )
+
+            return go.Figure(data=[trace_cbu, trace_non_cbu], layout=layout)
+
+    # Default fallback if nothing is selected
+    return dash.no_update
+
 
 # Sidebar toggle callback
 @app.callback(

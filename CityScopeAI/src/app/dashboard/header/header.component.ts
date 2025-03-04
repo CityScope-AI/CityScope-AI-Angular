@@ -1,4 +1,4 @@
-import { ThemeService } from './../services/theme.service';
+import { ThemeService } from '../../../services/theme.service';
 import { Component, OnInit, inject } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';

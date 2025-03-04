@@ -8,8 +8,6 @@ import { RippleModule } from 'primeng/ripple';
 import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ImageModule } from 'primeng/image';
-
-import { FirebaseService } from '../firebase.service';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 @Component({
@@ -37,8 +35,7 @@ export class LoginPageComponent {
   constructor(
     private primengConfig: PrimeNGConfig,
     private router: Router,
-    private firebaseService: FirebaseService
-  ) {}
+    ) {}
 
     ngOnInit() {
         this.primengConfig.ripple = true;

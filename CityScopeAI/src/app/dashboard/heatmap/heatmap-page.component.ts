@@ -7,7 +7,7 @@ import { VoronoiMapComponent } from "./voronoi-map/voronoi-map.component"; // âœ
 import { CommonModule } from '@angular/common';
 import { ZipcodeMapComponent } from './zipcode-map/zipcode-map.component';
 import { StateMapComponent } from "./state-map/state-map.component";
-import { BasemapService } from './../services/basemap.service';
+import { BasemapService } from '../../../services/basemap.service';
 export interface Map {
   name: string;
 }

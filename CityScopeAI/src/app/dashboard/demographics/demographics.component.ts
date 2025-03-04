@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IframeService } from '../services/iframe.service';
+import { IframeService } from '../../../services/iframe.service';
 import { ButtonModule } from 'primeng/button';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 

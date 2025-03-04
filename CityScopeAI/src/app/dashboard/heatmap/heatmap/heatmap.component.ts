@@ -7,13 +7,14 @@ import Search from '@arcgis/core/widgets/Search';
 import Legend from '@arcgis/core/widgets/Legend';
 import Expand from '@arcgis/core/widgets/Expand';
 import Graphic from '@arcgis/core/Graphic';
-import { zipCodeData } from '../../assets/data/ZipCodeData'; // Replace with the path to your zip code data
+import { zipCodeData } from '../../../../assets/data/ZipCodeData';
 import Point from '@arcgis/core/geometry/Point'; // Import Point explicitly
 import Basemap from '@arcgis/core/Basemap'; // ✅ Ensure Basemap is imported
-import { BasemapService } from './../../services/basemap.service';
+
+import { BasemapService } from '../../../../services/basemap.service';
 import { Subscription } from 'rxjs';
-import { Map } from '../../app/models/map.model';
-import { BaseMapOption } from '../../app/models/basemap.model';
+import { Map } from '../../../models/map.model';
+import { BaseMapOption } from '../../../models/basemap.model';
 @Component({
   selector: 'app-heatmap',
   standalone: true,

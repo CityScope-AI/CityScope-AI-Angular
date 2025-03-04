@@ -4,15 +4,15 @@ import { MenuItem } from 'primeng/api';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SplitterModule } from 'primeng/splitter';
 import { CardModule } from 'primeng/card';
-import { HeaderComponent } from "../header/header.component";
+import { HeaderComponent } from "./header/header.component";
 import { TabViewModule } from 'primeng/tabview';
-import { SettingsPageComponent } from "../settings-page/settings-page.component";
-import { HeatmapPageComponent } from "../heatmap/heatmap-page.component";
-import { IframeService } from '../services/iframe.service';
+import { SettingsPageComponent } from "./settings-page/settings-page.component";
+import { HeatmapPageComponent } from "./heatmap/heatmap-page.component";
+import { IframeService } from '../../services/iframe.service';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DataTablesComponent } from "../data-tables/data-tables.component";
-import { DemographicsComponent } from "../demographics/demographics.component";
+import { DataTablesComponent } from "./data-tables/data-tables.component";
+import { DemographicsComponent } from "./demographics/demographics.component";
 
 @Component({
   selector: 'app-dashboard',

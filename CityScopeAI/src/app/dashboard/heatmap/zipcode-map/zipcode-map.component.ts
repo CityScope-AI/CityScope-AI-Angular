@@ -5,10 +5,11 @@ import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Color from '@arcgis/core/Color';
-import { BasemapService } from './../../services/basemap.service';
+
+import { BasemapService } from '../../../../services/basemap.service';
 import { Subscription } from 'rxjs';
-import { Map } from '../../app/models/map.model';
-import { BaseMapOption } from '../../app/models/basemap.model';
+import { Map } from '../../../models/map.model';
+import { BaseMapOption } from '../../../models/basemap.model';
 import Basemap from '@arcgis/core/Basemap';
 import { HttpClient } from '@angular/common/http';
 import Extent from '@arcgis/core/geometry/Extent';

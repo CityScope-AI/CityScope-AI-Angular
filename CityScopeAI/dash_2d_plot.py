@@ -53,7 +53,7 @@ def generate_similarity_explanation(zip1, zip2, zip1_data, zip2_data):
     - Black Alone: {zip1_data['Black_Alone']}% vs. {zip2_data['Black_Alone']}%.
     - Hispanic or Latino: {zip1_data['Hispanic_Latino']}% vs. {zip2_data['Hispanic_Latino']}%.
 
-    Summarize the similarities and differences in one paragraph.
+    Summarize the similarities and differences in one paragraph. Do not hallucinate about where we got this data from.
     """
 
     payload = {
@@ -380,8 +380,8 @@ def update_portfolio(click_data, selected_cbu_zip):
             closest_cbu_zip, selected_zip, closest_cbu_data.iloc[0], zip_profile
         )
 
-        portfolio_content.append(html.H4(f"Most Similar CBU ZIP Code: {closest_cbu_zip}"))
-        portfolio_content.append(html.P(f"Similarity Explanation: {llm_summary}"))
+        portfolio_content.append(html.H4(f"Comparison between {closest_cbu_zip}"))
+        portfolio_content.append(html.P(f"{llm_summary}"))
 
     return portfolio_content
 

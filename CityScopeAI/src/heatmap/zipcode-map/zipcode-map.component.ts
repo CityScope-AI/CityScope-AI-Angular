@@ -172,34 +172,37 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
     console.log('Highlighting ZIP Code:', selectedZipCode);
     console.log('Similar ZIP Codes to highlight:', similarZipCodes);
 
-    // Create a SQL WHERE clause to highlight only the selected and similar zip codes
-    const zipCodesToHighlight = [selectedZipCode, ...similarZipCodes].map(zip => `'${zip}'`).join(',');
-    
-    this.zipCodeLayer.featureEffect = new FeatureEffect({
-        filter: new FeatureFilter({
-            where: `ZCTA5CE10 IN (${[selectedZipCode, ...similarZipCodes].map(zip => `'${zip}'`).join(',')})`,
-            geometry: this.mapView.extent ?? new Extent({
-                xmin: -180,
-                ymin: -90,
-                xmax: 180,
-                ymax: 90,
-                spatialReference: { wkid: 4326 }
-            }),
-            spatialRelationship: 'intersects',
-            distance: 0,
-            objectIds: [],
-            timeExtent: new TimeExtent({ start: new Date(0), end: new Date(0) }),
-            units: 'meters'
-        }),
-        excludedEffect: 'opacity(30%)',
-        includedEffect: 'opacity(100%)',
-        excludedLabelsVisible: false,
-    });
-    
-    
+    // Query all available ZIP codes on the map
+    this.zipCodeLayer.queryFeatures().then((result) => {
+        const allZipCodes = result.features.map(feature => feature.attributes['ZCTA5CE10']);
+        console.log('All ZIP Codes available on the map:', allZipCodes);
 
-    this.mapView.goTo({ target: this.zipCodeLayer.fullExtent, zoom: 6 }, { animate: false });
+        // Check which ZIP codes are not on the map
+        const missingZips = [selectedZipCode, ...similarZipCodes].filter(zip => !allZipCodes.includes(zip));
+        if (missingZips.length > 0) {
+            console.warn('These ZIP Codes were not found on the map:', missingZips);
+        }
+
+        // Apply the feature effect to highlight the correct zip codes
+        this.zipCodeLayer.featureEffect = new FeatureEffect({
+            filter: new FeatureFilter({
+                where: `ZCTA5CE10 IN (${[selectedZipCode, ...similarZipCodes].map(zip => `'${zip}'`).join(',')})`,
+            }),
+            excludedEffect: 'opacity(30%)',
+            includedEffect: 'opacity(100%)',
+            excludedLabelsVisible: false,
+        });
+
+        console.log('Feature filter applied with WHERE clause:', 
+            `ZCTA5CE10 IN (${[selectedZipCode, ...similarZipCodes].map(zip => `'${zip}'`).join(',')})`);
+    }).catch((error) => {
+        console.error('Error querying features:', error);
+    });
+
+    // Force a refresh of the GeoJSONLayer to avoid stale data
+    this.zipCodeLayer.refresh();
 }
+
 
 
 

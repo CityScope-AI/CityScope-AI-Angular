@@ -92,76 +92,81 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
     const webmap = new WebMap({ basemap: Basemap.fromId(this.basemap) });
 
     this.basemapSubscription = this.basemapService.currentBasemap$.subscribe((basemap) => {
-      this.basemap = basemap;
-      this.updateBasemap();
+        this.basemap = basemap;
+        this.updateBasemap();
     });
 
     this.mapView = new MapView({
-      container: 'zipcodeMapView',
-      map: webmap,
-      zoom: 4,
-      center: [-98.5795, 39.8283],
+        container: 'zipcodeMapView',
+        map: webmap,
+        zoom: 4,
+        center: [-98.5795, 39.8283],
     });
 
     this.zipCodeLayer = new GeoJSONLayer({
       url: 'assets/data/zip-codes.geojson',
-      renderer: this.getZipCodeRenderer(),
-      outFields: ['ZCTA5CE10', 'STATEFP10', 'GEOID10', 'ALAND10', 'AWATER10'], // ✅ Add all relevant fields here
+      outFields: ['ZCTA5CE10', 'STATEFP10', 'GEOID10', 'ALAND10', 'AWATER10'],
       popupTemplate: {
           title: 'ZIP Code: {ZCTA5CE10}',
           content: `
-            <b>State FIPS Code:</b> {STATEFP10}<br>
-            <b>Geographic ID:</b> {GEOID10}<br>
-            <b>Land Area:</b> {ALAND10} m²<br>
-            <b>Water Area:</b> {AWATER10} m²
+              <b>State FIPS Code:</b> {STATEFP10}<br>
+              <b>Geographic ID:</b> {GEOID10}<br>
+              <b>Land Area:</b> {ALAND10} m²<br>
+              <b>Water Area:</b> {AWATER10} m²
           `,
       },
+      // Add a renderer to set the default color of all ZIP codes
+      renderer: new SimpleRenderer({
+          symbol: new SimpleFillSymbol({
+              color: new Color([0, 92, 230, 0.3]), // Light gray with 30% opacity
+              outline: {
+                  color: '#000000',
+                  width: 0.25,
+              },
+          }),
+      }),
   });
   
 
     webmap.add(this.zipCodeLayer);
 
     this.zipCodeLayer.when(() => {
-      this.mapView.goTo(this.zipCodeLayer.fullExtent);
+        this.mapView.goTo(this.zipCodeLayer.fullExtent);
+        // Initialize map with default opacity for all zip codes
+        this.highlightSimilarZipCodes('');
     });
 
     this.mapView.on('click', (event) => {
-      this.mapView.hitTest(event).then((response) => {
-          console.log('Hit test response:', response);
-  
-          const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
-  
-          if (feature?.graphic) {
-              console.log('Graphic object:', feature.graphic);
-              console.log('Graphic attributes:', feature.graphic.attributes);
-  
-              const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
-              console.log('Selected ZIP Code:', selectedZipCode);
-  
-              const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
-              console.log('Fetched zip data:', zipData);
-  
-              if (zipData) {
-                  const similarZips = zipData.similar_zips;
-                  console.log('Similar ZIP Codes:', similarZips);
-  
-                  // ✅ Call the highlight function with the selected ZIP Code
-                  this.highlightSimilarZipCodes(selectedZipCode);
-              } else {
-                  console.warn(`No similar zip codes found for ${selectedZipCode}`);
-              }
-          } else {
-              console.warn('No graphic found in hit test response.');
-          }
-      });
-  });
-  
-    
-    
-    
-    
-    
-  }
+        this.mapView.hitTest(event).then((response) => {
+            console.log('Hit test response:', response);
+
+            const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
+
+            if (feature?.graphic) {
+                console.log('Graphic object:', feature.graphic);
+                console.log('Graphic attributes:', feature.graphic.attributes);
+
+                const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
+                console.log('Selected ZIP Code:', selectedZipCode);
+
+                const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
+                console.log('Fetched zip data:', zipData);
+
+                if (zipData) {
+                    const similarZips = zipData.similar_zips;
+                    console.log('Similar ZIP Codes:', similarZips);
+
+                    this.highlightSimilarZipCodes(selectedZipCode);
+                } else {
+                    console.warn(`No similar zip codes found for ${selectedZipCode}`);
+                }
+            } else {
+                console.warn('No graphic found in hit test response.');
+            }
+        });
+    });
+}
+
 
   private highlightSimilarZipCodes(selectedZipCode: string): void {
     const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
@@ -206,15 +211,6 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
 
 
 
-  private getZipCodeRenderer(): SimpleRenderer {
-    return new SimpleRenderer({
-      symbol: new SimpleFillSymbol({
-        color: new Color([0, 92, 230, 0.4]),
-        outline: {
-          color: '#000000',
-          width: 0.5,
-        },
-      }),
-    });
-  }
+
+
 }

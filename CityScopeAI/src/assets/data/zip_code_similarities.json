@@ -1,0 +1,1802 @@
+[
+    {
+        "zip_code": "92503",
+        "count": 260,
+        "similar_zips": [
+            {
+                "zip_code": "92154",
+                "population": 83758,
+                "median_income": 83287,
+                "similarity": 6.9984
+            },
+            {
+                "zip_code": "93033",
+                "population": 82517,
+                "median_income": 82606,
+                "similarity": 5.9531
+            },
+            {
+                "zip_code": "92804",
+                "population": 84700,
+                "median_income": 75847,
+                "similarity": 4.6622
+            },
+            {
+                "zip_code": "91911",
+                "population": 87799,
+                "median_income": 77705,
+                "similarity": 4.4017
+            },
+            {
+                "zip_code": "95076",
+                "population": 83716,
+                "median_income": 86062,
+                "similarity": 3.6032
+            }
+        ]
+    },
+    {
+        "zip_code": "92504",
+        "count": 217,
+        "similar_zips": [
+            {
+                "zip_code": "92505",
+                "population": 52696,
+                "median_income": 81217,
+                "similarity": 21.5454
+            },
+            {
+                "zip_code": "92530",
+                "population": 58249,
+                "median_income": 77569,
+                "similarity": 16.5386
+            },
+            {
+                "zip_code": "92346",
+                "population": 60025,
+                "median_income": 81571,
+                "similarity": 7.6185
+            },
+            {
+                "zip_code": "93313",
+                "population": 59924,
+                "median_income": 96149,
+                "similarity": 6.6738
+            },
+            {
+                "zip_code": "80219",
+                "population": 64696,
+                "median_income": 61666,
+                "similarity": 1.0843
+            }
+        ]
+    },
+    {
+        "zip_code": "92508",
+        "count": 176,
+        "similar_zips": [
+            {
+                "zip_code": "94534",
+                "population": 41395,
+                "median_income": 132382,
+                "similarity": 9.8277
+            },
+            {
+                "zip_code": "11040",
+                "population": 42140,
+                "median_income": 144174,
+                "similarity": 2.9307
+            },
+            {
+                "zip_code": "95377",
+                "population": 35001,
+                "median_income": 145264,
+                "similarity": 2.8408
+            },
+            {
+                "zip_code": "91350",
+                "population": 42970,
+                "median_income": 137626,
+                "similarity": 2.6359
+            },
+            {
+                "zip_code": "91915",
+                "population": 35608,
+                "median_income": 136297,
+                "similarity": 2.4987
+            }
+        ]
+    },
+    {
+        "zip_code": "92506",
+        "count": 153,
+        "similar_zips": [
+            {
+                "zip_code": "95688",
+                "population": 40147,
+                "median_income": 116699,
+                "similarity": 1.6519
+            },
+            {
+                "zip_code": "95765",
+                "population": 43059,
+                "median_income": 121847,
+                "similarity": 1.4549
+            },
+            {
+                "zip_code": "92065",
+                "population": 36836,
+                "median_income": 120683,
+                "similarity": 1.1151
+            },
+            {
+                "zip_code": "98026",
+                "population": 39035,
+                "median_income": 118151,
+                "similarity": 0.9942
+            },
+            {
+                "zip_code": "94954",
+                "population": 38201,
+                "median_income": 108630,
+                "similarity": 0.8654
+            }
+        ]
+    },
+    {
+        "zip_code": "92880",
+        "count": 133,
+        "similar_zips": [
+            {
+                "zip_code": "91709",
+                "population": 78341,
+                "median_income": 117603,
+                "similarity": 11.4883
+            },
+            {
+                "zip_code": "92126",
+                "population": 78111,
+                "median_income": 116013,
+                "similarity": 10.2221
+            },
+            {
+                "zip_code": "96706",
+                "population": 82504,
+                "median_income": 118316,
+                "similarity": 1.7549
+            },
+            {
+                "zip_code": "96797",
+                "population": 72605,
+                "median_income": 104590,
+                "similarity": 1.6126
+            },
+            {
+                "zip_code": "90631",
+                "population": 69064,
+                "median_income": 98009,
+                "similarity": 1.104
+            }
+        ]
+    },
+    {
+        "zip_code": "92571",
+        "count": 122,
+        "similar_zips": [
+            {
+                "zip_code": "92570",
+                "population": 58275,
+                "median_income": 75249,
+                "similarity": 10.2614
+            },
+            {
+                "zip_code": "96792",
+                "population": 51367,
+                "median_income": 79575,
+                "similarity": 4.9199
+            },
+            {
+                "zip_code": "92324",
+                "population": 57593,
+                "median_income": 66836,
+                "similarity": 4.4778
+            },
+            {
+                "zip_code": "95828",
+                "population": 60850,
+                "median_income": 74493,
+                "similarity": 2.1855
+            },
+            {
+                "zip_code": "95206",
+                "population": 68031,
+                "median_income": 69559,
+                "similarity": 1.9876
+            }
+        ]
+    },
+    {
+        "zip_code": "92336",
+        "count": 121,
+        "similar_zips": [
+            {
+                "zip_code": "90650",
+                "population": 101983,
+                "median_income": 91259,
+                "similarity": 32.3203
+            },
+            {
+                "zip_code": "11373",
+                "population": 102618,
+                "median_income": 67489,
+                "similarity": 10.1185
+            },
+            {
+                "zip_code": "94565",
+                "population": 100826,
+                "median_income": 92399,
+                "similarity": 8.6418
+            },
+            {
+                "zip_code": "11368",
+                "population": 112750,
+                "median_income": 69391,
+                "similarity": 5.4804
+            },
+            {
+                "zip_code": "91331",
+                "population": 99804,
+                "median_income": 76942,
+                "similarity": 5.0982
+            }
+        ]
+    },
+    {
+        "zip_code": "92509",
+        "count": 108,
+        "similar_zips": [
+            {
+                "zip_code": "93033",
+                "population": 82517,
+                "median_income": 82606,
+                "similarity": 6.675
+            },
+            {
+                "zip_code": "91335",
+                "population": 77158,
+                "median_income": 74632,
+                "similarity": 3.6519
+            },
+            {
+                "zip_code": "92503",
+                "population": 88617,
+                "median_income": 87042,
+                "similarity": 3.2646
+            },
+            {
+                "zip_code": "91710",
+                "population": 81466,
+                "median_income": 98099,
+                "similarity": 3.1283
+            },
+            {
+                "zip_code": "92154",
+                "population": 83758,
+                "median_income": 83287,
+                "similarity": 2.8051
+            }
+        ]
+    },
+    {
+        "zip_code": "92882",
+        "count": 105,
+        "similar_zips": [
+            {
+                "zip_code": "90631",
+                "population": 69064,
+                "median_income": 98009,
+                "similarity": 19.5114
+            },
+            {
+                "zip_code": "91709",
+                "population": 78341,
+                "median_income": 117603,
+                "similarity": 1.0647
+            },
+            {
+                "zip_code": "92126",
+                "population": 78111,
+                "median_income": 116013,
+                "similarity": 1.0556
+            },
+            {
+                "zip_code": "92880",
+                "population": 74645,
+                "median_income": 139147,
+                "similarity": 1.0527
+            },
+            {
+                "zip_code": "96797",
+                "population": 72605,
+                "median_income": 104590,
+                "similarity": 0.9499
+            }
+        ]
+    },
+    {
+        "zip_code": "92399",
+        "count": 101,
+        "similar_zips": [
+            {
+                "zip_code": "95336",
+                "population": 49145,
+                "median_income": 81154,
+                "similarity": 9.7602
+            },
+            {
+                "zip_code": "1844",
+                "population": 52780,
+                "median_income": 93739,
+                "similarity": 8.4877
+            },
+            {
+                "zip_code": "89074",
+                "population": 52135,
+                "median_income": 86015,
+                "similarity": 7.8517
+            },
+            {
+                "zip_code": "60630",
+                "population": 55295,
+                "median_income": 91135,
+                "similarity": 4.6689
+            },
+            {
+                "zip_code": "89129",
+                "population": 54002,
+                "median_income": 87620,
+                "similarity": 3.102
+            }
+        ]
+    },
+    {
+        "zip_code": "92881",
+        "count": 101,
+        "similar_zips": [
+            {
+                "zip_code": "91384",
+                "population": 27652,
+                "median_income": 127416,
+                "similarity": 13.2961
+            },
+            {
+                "zip_code": "33331",
+                "population": 25418,
+                "median_income": 136734,
+                "similarity": 3.597
+            },
+            {
+                "zip_code": "90713",
+                "population": 28439,
+                "median_income": 123809,
+                "similarity": 1.936
+            },
+            {
+                "zip_code": "94518",
+                "population": 28287,
+                "median_income": 111186,
+                "similarity": 1.2721
+            },
+            {
+                "zip_code": "92123",
+                "population": 32951,
+                "median_income": 111282,
+                "similarity": 1.0974
+            }
+        ]
+    },
+    {
+        "zip_code": "92505",
+        "count": 94,
+        "similar_zips": [
+            {
+                "zip_code": "92504",
+                "population": 57636,
+                "median_income": 83139,
+                "similarity": 21.5454
+            },
+            {
+                "zip_code": "92530",
+                "population": 58249,
+                "median_income": 77569,
+                "similarity": 21.4516
+            },
+            {
+                "zip_code": "92346",
+                "population": 60025,
+                "median_income": 81571,
+                "similarity": 8.513
+            },
+            {
+                "zip_code": "93313",
+                "population": 59924,
+                "median_income": 96149,
+                "similarity": 5.1065
+            },
+            {
+                "zip_code": "80219",
+                "population": 64696,
+                "median_income": 61666,
+                "similarity": 1.0974
+            }
+        ]
+    },
+    {
+        "zip_code": "92223",
+        "count": 91,
+        "similar_zips": [
+            {
+                "zip_code": "89148",
+                "population": 62337,
+                "median_income": 92362,
+                "similarity": 4.1312
+            },
+            {
+                "zip_code": "11706",
+                "population": 65437,
+                "median_income": 110965,
+                "similarity": 2.6737
+            },
+            {
+                "zip_code": "92584",
+                "population": 54663,
+                "median_income": 111057,
+                "similarity": 1.7676
+            },
+            {
+                "zip_code": "98023",
+                "population": 50778,
+                "median_income": 98057,
+                "similarity": 1.6343
+            },
+            {
+                "zip_code": "93551",
+                "population": 54478,
+                "median_income": 107133,
+                "similarity": 1.6037
+            }
+        ]
+    },
+    {
+        "zip_code": "92557",
+        "count": 86,
+        "similar_zips": [
+            {
+                "zip_code": "85339",
+                "population": 50686,
+                "median_income": 97057,
+                "similarity": 6.6034
+            },
+            {
+                "zip_code": "89139",
+                "population": 43702,
+                "median_income": 93003,
+                "similarity": 2.9946
+            },
+            {
+                "zip_code": "95209",
+                "population": 46756,
+                "median_income": 94324,
+                "similarity": 2.4318
+            },
+            {
+                "zip_code": "95822",
+                "population": 46413,
+                "median_income": 76774,
+                "similarity": 1.992
+            },
+            {
+                "zip_code": "80239",
+                "population": 46450,
+                "median_income": 84128,
+                "similarity": 1.7929
+            }
+        ]
+    },
+    {
+        "zip_code": "92555",
+        "count": 84,
+        "similar_zips": [
+            {
+                "zip_code": "11520",
+                "population": 44876,
+                "median_income": 110152,
+                "similarity": 3.5019
+            },
+            {
+                "zip_code": "8902",
+                "population": 43037,
+                "median_income": 110195,
+                "similarity": 2.0552
+            },
+            {
+                "zip_code": "77583",
+                "population": 44443,
+                "median_income": 110852,
+                "similarity": 1.5478
+            },
+            {
+                "zip_code": "8817",
+                "population": 48140,
+                "median_income": 105419,
+                "similarity": 1.2312
+            },
+            {
+                "zip_code": "11003",
+                "population": 47515,
+                "median_income": 119448,
+                "similarity": 1.2087
+            }
+        ]
+    },
+    {
+        "zip_code": "92553",
+        "count": 84,
+        "similar_zips": [
+            {
+                "zip_code": "95823",
+                "population": 82983,
+                "median_income": 59547,
+                "similarity": 11.2911
+            },
+            {
+                "zip_code": "93550",
+                "population": 81501,
+                "median_income": 61394,
+                "similarity": 3.4508
+            },
+            {
+                "zip_code": "60608",
+                "population": 82749,
+                "median_income": 66821,
+                "similarity": 3.3233
+            },
+            {
+                "zip_code": "93535",
+                "population": 80905,
+                "median_income": 61183,
+                "similarity": 2.8218
+            },
+            {
+                "zip_code": "60639",
+                "population": 85248,
+                "median_income": 54969,
+                "similarity": 2.2672
+            }
+        ]
+    },
+    {
+        "zip_code": "91709",
+        "count": 83,
+        "similar_zips": [
+            {
+                "zip_code": "92126",
+                "population": 78111,
+                "median_income": 116013,
+                "similarity": 73.1523
+            },
+            {
+                "zip_code": "92880",
+                "population": 74645,
+                "median_income": 139147,
+                "similarity": 11.4883
+            },
+            {
+                "zip_code": "96706",
+                "population": 82504,
+                "median_income": 118316,
+                "similarity": 2.0701
+            },
+            {
+                "zip_code": "96797",
+                "population": 72605,
+                "median_income": 104590,
+                "similarity": 1.8758
+            },
+            {
+                "zip_code": "90631",
+                "population": 69064,
+                "median_income": 98009,
+                "similarity": 1.1201
+            }
+        ]
+    },
+    {
+        "zip_code": "92879",
+        "count": 82,
+        "similar_zips": [
+            {
+                "zip_code": "95376",
+                "population": 55038,
+                "median_income": 99675,
+                "similarity": 4.3426
+            },
+            {
+                "zip_code": "91786",
+                "population": 56025,
+                "median_income": 81973,
+                "similarity": 3.3837
+            },
+            {
+                "zip_code": "95337",
+                "population": 44192,
+                "median_income": 99665,
+                "similarity": 3.2196
+            },
+            {
+                "zip_code": "33176",
+                "population": 52719,
+                "median_income": 80612,
+                "similarity": 3.0279
+            },
+            {
+                "zip_code": "95023",
+                "population": 57367,
+                "median_income": 103238,
+                "similarity": 1.9245
+            }
+        ]
+    },
+    {
+        "zip_code": "92584",
+        "count": 80,
+        "similar_zips": [
+            {
+                "zip_code": "93551",
+                "population": 54478,
+                "median_income": 107133,
+                "similarity": 17.2932
+            },
+            {
+                "zip_code": "98023",
+                "population": 50778,
+                "median_income": 98057,
+                "similarity": 9.7525
+            },
+            {
+                "zip_code": "92223",
+                "population": 61686,
+                "median_income": 99983,
+                "similarity": 1.7676
+            },
+            {
+                "zip_code": "89148",
+                "population": 62337,
+                "median_income": 92362,
+                "similarity": 1.6173
+            },
+            {
+                "zip_code": "11706",
+                "population": 65437,
+                "median_income": 110965,
+                "similarity": 1.1439
+            }
+        ]
+    },
+    {
+        "zip_code": "92883",
+        "count": 79,
+        "similar_zips": [
+            {
+                "zip_code": "92596",
+                "population": 35726,
+                "median_income": 114542,
+                "similarity": 1.8934
+            },
+            {
+                "zip_code": "98059",
+                "population": 41619,
+                "median_income": 126846,
+                "similarity": 1.7586
+            },
+            {
+                "zip_code": "91351",
+                "population": 32677,
+                "median_income": 104214,
+                "similarity": 1.7286
+            },
+            {
+                "zip_code": "11801",
+                "population": 41967,
+                "median_income": 138289,
+                "similarity": 1.6236
+            },
+            {
+                "zip_code": "91311",
+                "population": 40196,
+                "median_income": 112172,
+                "similarity": 1.5358
+            }
+        ]
+    },
+    {
+        "zip_code": "92507",
+        "count": 76,
+        "similar_zips": [
+            {
+                "zip_code": "7047",
+                "population": 62066,
+                "median_income": 76053,
+                "similarity": 2.2633
+            },
+            {
+                "zip_code": "7306",
+                "population": 54779,
+                "median_income": 74610,
+                "similarity": 1.6139
+            },
+            {
+                "zip_code": "91764",
+                "population": 55311,
+                "median_income": 71336,
+                "similarity": 1.4194
+            },
+            {
+                "zip_code": "80219",
+                "population": 64696,
+                "median_income": 61666,
+                "similarity": 1.3837
+            },
+            {
+                "zip_code": "93458",
+                "population": 59789,
+                "median_income": 75519,
+                "similarity": 1.3015
+            }
+        ]
+    },
+    {
+        "zip_code": "92374",
+        "count": 75,
+        "similar_zips": [
+            {
+                "zip_code": "11374",
+                "population": 47230,
+                "median_income": 86006,
+                "similarity": 18.9818
+            },
+            {
+                "zip_code": "90802",
+                "population": 40012,
+                "median_income": 69613,
+                "similarity": 0.713
+            },
+            {
+                "zip_code": "10301",
+                "population": 40331,
+                "median_income": 84855,
+                "similarity": 0.6688
+            },
+            {
+                "zip_code": "10304",
+                "population": 44864,
+                "median_income": 69479,
+                "similarity": 0.6671
+            },
+            {
+                "zip_code": "92102",
+                "population": 40051,
+                "median_income": 68900,
+                "similarity": 0.6598
+            }
+        ]
+    },
+    {
+        "zip_code": "92562",
+        "count": 72,
+        "similar_zips": [
+            {
+                "zip_code": "98208",
+                "population": 60723,
+                "median_income": 98805,
+                "similarity": 5.2356
+            },
+            {
+                "zip_code": "89052",
+                "population": 59075,
+                "median_income": 96944,
+                "similarity": 3.9241
+            },
+            {
+                "zip_code": "10306",
+                "population": 56232,
+                "median_income": 94758,
+                "similarity": 2.0735
+            },
+            {
+                "zip_code": "10312",
+                "population": 63473,
+                "median_income": 107414,
+                "similarity": 1.6789
+            },
+            {
+                "zip_code": "92071",
+                "population": 59795,
+                "median_income": 101906,
+                "similarity": 1.65
+            }
+        ]
+    },
+    {
+        "zip_code": "91752",
+        "count": 71,
+        "similar_zips": [
+            {
+                "zip_code": "91722",
+                "population": 34470,
+                "median_income": 95157,
+                "similarity": 5.2038
+            },
+            {
+                "zip_code": "90604",
+                "population": 39795,
+                "median_income": 95570,
+                "similarity": 3.2266
+            },
+            {
+                "zip_code": "90605",
+                "population": 41427,
+                "median_income": 94200,
+                "similarity": 2.7418
+            },
+            {
+                "zip_code": "91790",
+                "population": 44855,
+                "median_income": 97868,
+                "similarity": 1.8965
+            },
+            {
+                "zip_code": "90242",
+                "population": 41685,
+                "median_income": 81448,
+                "similarity": 1.7042
+            }
+        ]
+    },
+    {
+        "zip_code": "91710",
+        "count": 69,
+        "similar_zips": [
+            {
+                "zip_code": "91335",
+                "population": 77158,
+                "median_income": 74632,
+                "similarity": 19.1744
+            },
+            {
+                "zip_code": "91910",
+                "population": 76313,
+                "median_income": 84111,
+                "similarity": 11.2888
+            },
+            {
+                "zip_code": "92154",
+                "population": 83758,
+                "median_income": 83287,
+                "similarity": 4.3152
+            },
+            {
+                "zip_code": "93033",
+                "population": 82517,
+                "median_income": 82606,
+                "similarity": 4.123
+            },
+            {
+                "zip_code": "92805",
+                "population": 73310,
+                "median_income": 81576,
+                "similarity": 3.4407
+            }
+        ]
+    },
+    {
+        "zip_code": "92335",
+        "count": 68,
+        "similar_zips": [
+            {
+                "zip_code": "90011",
+                "population": 106042,
+                "median_income": 51819,
+                "similarity": 8.2609
+            },
+            {
+                "zip_code": "90201",
+                "population": 95134,
+                "median_income": 53692,
+                "similarity": 4.3363
+            },
+            {
+                "zip_code": "91331",
+                "population": 99804,
+                "median_income": 76942,
+                "similarity": 4.1604
+            },
+            {
+                "zip_code": "90650",
+                "population": 101983,
+                "median_income": 91259,
+                "similarity": 3.0605
+            },
+            {
+                "zip_code": "90280",
+                "population": 92262,
+                "median_income": 67287,
+                "similarity": 3.0073
+            }
+        ]
+    },
+    {
+        "zip_code": "92570",
+        "count": 66,
+        "similar_zips": [
+            {
+                "zip_code": "92571",
+                "population": 59896,
+                "median_income": 81884,
+                "similarity": 10.2614
+            },
+            {
+                "zip_code": "92324",
+                "population": 57593,
+                "median_income": 66836,
+                "similarity": 7.3938
+            },
+            {
+                "zip_code": "96792",
+                "population": 51367,
+                "median_income": 79575,
+                "similarity": 3.5789
+            },
+            {
+                "zip_code": "95206",
+                "population": 68031,
+                "median_income": 69559,
+                "similarity": 2.2339
+            },
+            {
+                "zip_code": "95828",
+                "population": 60850,
+                "median_income": 74493,
+                "similarity": 1.9055
+            }
+        ]
+    },
+    {
+        "zip_code": "92407",
+        "count": 62,
+        "similar_zips": [
+            {
+                "zip_code": "11372",
+                "population": 67001,
+                "median_income": 73089,
+                "similarity": 7.7383
+            },
+            {
+                "zip_code": "7093",
+                "population": 64203,
+                "median_income": 70683,
+                "similarity": 6.2824
+            },
+            {
+                "zip_code": "93458",
+                "population": 59789,
+                "median_income": 75519,
+                "similarity": 3.2508
+            },
+            {
+                "zip_code": "95828",
+                "population": 60850,
+                "median_income": 74493,
+                "similarity": 1.9831
+            },
+            {
+                "zip_code": "80219",
+                "population": 64696,
+                "median_income": 61666,
+                "similarity": 1.5885
+            }
+        ]
+    },
+    {
+        "zip_code": "92324",
+        "count": 62,
+        "similar_zips": [
+            {
+                "zip_code": "92570",
+                "population": 58275,
+                "median_income": 75249,
+                "similarity": 7.3938
+            },
+            {
+                "zip_code": "92571",
+                "population": 59896,
+                "median_income": 81884,
+                "similarity": 4.4778
+            },
+            {
+                "zip_code": "96792",
+                "population": 51367,
+                "median_income": 79575,
+                "similarity": 2.4118
+            },
+            {
+                "zip_code": "95206",
+                "population": 68031,
+                "median_income": 69559,
+                "similarity": 2.1044
+            },
+            {
+                "zip_code": "95828",
+                "population": 60850,
+                "median_income": 74493,
+                "similarity": 1.7425
+            }
+        ]
+    },
+    {
+        "zip_code": "91739",
+        "count": 61,
+        "similar_zips": [
+            {
+                "zip_code": "91915",
+                "population": 35608,
+                "median_income": 136297,
+                "similarity": 77.1743
+            },
+            {
+                "zip_code": "95377",
+                "population": 35001,
+                "median_income": 145264,
+                "similarity": 19.0381
+            },
+            {
+                "zip_code": "11040",
+                "population": 42140,
+                "median_income": 144174,
+                "similarity": 14.263
+            },
+            {
+                "zip_code": "94534",
+                "population": 41395,
+                "median_income": 132382,
+                "similarity": 2.8871
+            },
+            {
+                "zip_code": "92508",
+                "population": 36500,
+                "median_income": 141449,
+                "similarity": 2.4846
+            }
+        ]
+    },
+    {
+        "zip_code": "92592",
+        "count": 60,
+        "similar_zips": [
+            {
+                "zip_code": "95747",
+                "population": 75681,
+                "median_income": 129469,
+                "similarity": 15.3575
+            },
+            {
+                "zip_code": "95630",
+                "population": 76599,
+                "median_income": 134844,
+                "similarity": 11.6251
+            },
+            {
+                "zip_code": "98012",
+                "population": 75555,
+                "median_income": 139474,
+                "similarity": 5.2532
+            },
+            {
+                "zip_code": "97229",
+                "population": 74755,
+                "median_income": 150580,
+                "similarity": 1.7921
+            },
+            {
+                "zip_code": "11746",
+                "population": 67663,
+                "median_income": 146150,
+                "similarity": 1.7334
+            }
+        ]
+    },
+    {
+        "zip_code": "92376",
+        "count": 60,
+        "similar_zips": [
+            {
+                "zip_code": "93535",
+                "population": 80905,
+                "median_income": 61183,
+                "similarity": 4.697
+            },
+            {
+                "zip_code": "60608",
+                "population": 82749,
+                "median_income": 66821,
+                "similarity": 4.0681
+            },
+            {
+                "zip_code": "60639",
+                "population": 85248,
+                "median_income": 54969,
+                "similarity": 3.799
+            },
+            {
+                "zip_code": "93550",
+                "population": 81501,
+                "median_income": 61394,
+                "similarity": 3.7793
+            },
+            {
+                "zip_code": "60804",
+                "population": 84189,
+                "median_income": 64325,
+                "similarity": 3.1529
+            }
+        ]
+    },
+    {
+        "zip_code": "92346",
+        "count": 59,
+        "similar_zips": [
+            {
+                "zip_code": "92530",
+                "population": 58249,
+                "median_income": 77569,
+                "similarity": 13.5743
+            },
+            {
+                "zip_code": "92505",
+                "population": 52696,
+                "median_income": 81217,
+                "similarity": 8.513
+            },
+            {
+                "zip_code": "92504",
+                "population": 57636,
+                "median_income": 83139,
+                "similarity": 7.6185
+            },
+            {
+                "zip_code": "93313",
+                "population": 59924,
+                "median_income": 96149,
+                "similarity": 4.3778
+            },
+            {
+                "zip_code": "80219",
+                "population": 64696,
+                "median_income": 61666,
+                "similarity": 1.2588
+            }
+        ]
+    },
+    {
+        "zip_code": "92563",
+        "count": 59,
+        "similar_zips": [
+            {
+                "zip_code": "95624",
+                "population": 67915,
+                "median_income": 114558,
+                "similarity": 7.7328
+            },
+            {
+                "zip_code": "95687",
+                "population": 68996,
+                "median_income": 104135,
+                "similarity": 3.0543
+            },
+            {
+                "zip_code": "93536",
+                "population": 72131,
+                "median_income": 97418,
+                "similarity": 1.665
+            },
+            {
+                "zip_code": "11706",
+                "population": 65437,
+                "median_income": 110965,
+                "similarity": 1.254
+            },
+            {
+                "zip_code": "92223",
+                "population": 61686,
+                "median_income": 99983,
+                "similarity": 0.8985
+            }
+        ]
+    },
+    {
+        "zip_code": "92373",
+        "count": 58,
+        "similar_zips": [
+            {
+                "zip_code": "91750",
+                "population": 33436,
+                "median_income": 103774,
+                "similarity": 7.7031
+            },
+            {
+                "zip_code": "92081",
+                "population": 29475,
+                "median_income": 99153,
+                "similarity": 6.9756
+            },
+            {
+                "zip_code": "93035",
+                "population": 26286,
+                "median_income": 100074,
+                "similarity": 5.3841
+            },
+            {
+                "zip_code": "91773",
+                "population": 34066,
+                "median_income": 101466,
+                "similarity": 4.2235
+            },
+            {
+                "zip_code": "98056",
+                "population": 36116,
+                "median_income": 102196,
+                "similarity": 2.3197
+            }
+        ]
+    },
+    {
+        "zip_code": "92860",
+        "count": 55,
+        "similar_zips": [
+            {
+                "zip_code": "94519",
+                "population": 20162,
+                "median_income": 118587,
+                "similarity": 14.3202
+            },
+            {
+                "zip_code": "92082",
+                "population": 20678,
+                "median_income": 111716,
+                "similarity": 11.6143
+            },
+            {
+                "zip_code": "93444",
+                "population": 22079,
+                "median_income": 102566,
+                "similarity": 7.5807
+            },
+            {
+                "zip_code": "90732",
+                "population": 22078,
+                "median_income": 115120,
+                "similarity": 2.3022
+            },
+            {
+                "zip_code": "90603",
+                "population": 20883,
+                "median_income": 117324,
+                "similarity": 1.4487
+            }
+        ]
+    },
+    {
+        "zip_code": "92530",
+        "count": 46,
+        "similar_zips": [
+            {
+                "zip_code": "92505",
+                "population": 52696,
+                "median_income": 81217,
+                "similarity": 21.4516
+            },
+            {
+                "zip_code": "92504",
+                "population": 57636,
+                "median_income": 83139,
+                "similarity": 16.5386
+            },
+            {
+                "zip_code": "92346",
+                "population": 60025,
+                "median_income": 81571,
+                "similarity": 13.5743
+            },
+            {
+                "zip_code": "93313",
+                "population": 59924,
+                "median_income": 96149,
+                "similarity": 5.2992
+            },
+            {
+                "zip_code": "80219",
+                "population": 64696,
+                "median_income": 61666,
+                "similarity": 1.1521
+            }
+        ]
+    },
+    {
+        "zip_code": "92337",
+        "count": 44,
+        "similar_zips": [
+            {
+                "zip_code": "92551",
+                "population": 36326,
+                "median_income": 91579,
+                "similarity": 7.149
+            },
+            {
+                "zip_code": "11722",
+                "population": 37032,
+                "median_income": 100387,
+                "similarity": 6.0799
+            },
+            {
+                "zip_code": "93552",
+                "population": 43371,
+                "median_income": 85890,
+                "similarity": 2.4079
+            },
+            {
+                "zip_code": "94589",
+                "population": 29959,
+                "median_income": 85373,
+                "similarity": 1.8343
+            },
+            {
+                "zip_code": "20877",
+                "population": 38524,
+                "median_income": 86134,
+                "similarity": 1.2538
+            }
+        ]
+    },
+    {
+        "zip_code": "92551",
+        "count": 44,
+        "similar_zips": [
+            {
+                "zip_code": "11722",
+                "population": 37032,
+                "median_income": 100387,
+                "similarity": 27.8556
+            },
+            {
+                "zip_code": "92337",
+                "population": 37292,
+                "median_income": 99414,
+                "similarity": 7.149
+            },
+            {
+                "zip_code": "93552",
+                "population": 43371,
+                "median_income": 85890,
+                "similarity": 2.4218
+            },
+            {
+                "zip_code": "94589",
+                "population": 29959,
+                "median_income": 85373,
+                "similarity": 2.2339
+            },
+            {
+                "zip_code": "20877",
+                "population": 38524,
+                "median_income": 86134,
+                "similarity": 1.515
+            }
+        ]
+    },
+    {
+        "zip_code": "91761",
+        "count": 42,
+        "similar_zips": [
+            {
+                "zip_code": "91702",
+                "population": 62196,
+                "median_income": 82382,
+                "similarity": 27.8166
+            },
+            {
+                "zip_code": "92801",
+                "population": 64022,
+                "median_income": 76264,
+                "similarity": 6.7311
+            },
+            {
+                "zip_code": "93030",
+                "population": 58511,
+                "median_income": 88508,
+                "similarity": 4.8078
+            },
+            {
+                "zip_code": "90660",
+                "population": 61561,
+                "median_income": 82539,
+                "similarity": 1.991
+            },
+            {
+                "zip_code": "93906",
+                "population": 66883,
+                "median_income": 93626,
+                "similarity": 1.559
+            }
+        ]
+    },
+    {
+        "zip_code": "92404",
+        "count": 41,
+        "similar_zips": [
+            {
+                "zip_code": "92392",
+                "population": 61859,
+                "median_income": 73860,
+                "similarity": 5.4885
+            },
+            {
+                "zip_code": "34744",
+                "population": 60995,
+                "median_income": 63320,
+                "similarity": 3.8311
+            },
+            {
+                "zip_code": "60402",
+                "population": 64659,
+                "median_income": 71449,
+                "similarity": 2.5778
+            },
+            {
+                "zip_code": "85041",
+                "population": 62702,
+                "median_income": 65345,
+                "similarity": 2.1858
+            },
+            {
+                "zip_code": "32822",
+                "population": 68321,
+                "median_income": 51555,
+                "similarity": 1.9136
+            }
+        ]
+    },
+    {
+        "zip_code": "91737",
+        "count": 38,
+        "similar_zips": [
+            {
+                "zip_code": "11102",
+                "population": 27069,
+                "median_income": 103409,
+                "similarity": 5.2275
+            },
+            {
+                "zip_code": "91902",
+                "population": 17121,
+                "median_income": 123516,
+                "similarity": 3.1928
+            },
+            {
+                "zip_code": "92123",
+                "population": 32951,
+                "median_income": 111282,
+                "similarity": 1.9849
+            },
+            {
+                "zip_code": "90603",
+                "population": 20883,
+                "median_income": 117324,
+                "similarity": 1.9847
+            },
+            {
+                "zip_code": "92865",
+                "population": 21140,
+                "median_income": 120365,
+                "similarity": 1.9679
+            }
+        ]
+    },
+    {
+        "zip_code": "92532",
+        "count": 38,
+        "similar_zips": [
+            {
+                "zip_code": "89166",
+                "population": 28613,
+                "median_income": 101276,
+                "similarity": 2.6998
+            },
+            {
+                "zip_code": "99507",
+                "population": 35708,
+                "median_income": 100829,
+                "similarity": 2.69
+            },
+            {
+                "zip_code": "60169",
+                "population": 33910,
+                "median_income": 92512,
+                "similarity": 2.4348
+            },
+            {
+                "zip_code": "33325",
+                "population": 31546,
+                "median_income": 93060,
+                "similarity": 2.2408
+            },
+            {
+                "zip_code": "33073",
+                "population": 33691,
+                "median_income": 94775,
+                "similarity": 1.6726
+            }
+        ]
+    },
+    {
+        "zip_code": "92545",
+        "count": 37,
+        "similar_zips": [
+            {
+                "zip_code": "89502",
+                "population": 46412,
+                "median_income": 58228,
+                "similarity": 10.6619
+            },
+            {
+                "zip_code": "33615",
+                "population": 48849,
+                "median_income": 61761,
+                "similarity": 4.6392
+            },
+            {
+                "zip_code": "84119",
+                "population": 51180,
+                "median_income": 63823,
+                "similarity": 4.3321
+            },
+            {
+                "zip_code": "92234",
+                "population": 51964,
+                "median_income": 63209,
+                "similarity": 1.9144
+            },
+            {
+                "zip_code": "92308",
+                "population": 43191,
+                "median_income": 60717,
+                "similarity": 1.6753
+            }
+        ]
+    },
+    {
+        "zip_code": "92544",
+        "count": 37,
+        "similar_zips": [
+            {
+                "zip_code": "95350",
+                "population": 55368,
+                "median_income": 66185,
+                "similarity": 6.4264
+            },
+            {
+                "zip_code": "19148",
+                "population": 50324,
+                "median_income": 71533,
+                "similarity": 3.2299
+            },
+            {
+                "zip_code": "30721",
+                "population": 53067,
+                "median_income": 51775,
+                "similarity": 1.4867
+            },
+            {
+                "zip_code": "78155",
+                "population": 52295,
+                "median_income": 68430,
+                "similarity": 1.2493
+            },
+            {
+                "zip_code": "89502",
+                "population": 46412,
+                "median_income": 58228,
+                "similarity": 1.0816
+            }
+        ]
+    },
+    {
+        "zip_code": "91762",
+        "count": 37,
+        "similar_zips": [
+            {
+                "zip_code": "91761",
+                "population": 61837,
+                "median_income": 89041,
+                "similarity": 1.2201
+            },
+            {
+                "zip_code": "91764",
+                "population": 55311,
+                "median_income": 71336,
+                "similarity": 1.1984
+            },
+            {
+                "zip_code": "91702",
+                "population": 62196,
+                "median_income": 82382,
+                "similarity": 1.169
+            },
+            {
+                "zip_code": "92507",
+                "population": 60949,
+                "median_income": 67203,
+                "similarity": 1.1417
+            },
+            {
+                "zip_code": "91767",
+                "population": 50715,
+                "median_income": 75870,
+                "similarity": 1.108
+            }
+        ]
+    },
+    {
+        "zip_code": "92308",
+        "count": 37,
+        "similar_zips": [
+            {
+                "zip_code": "2740",
+                "population": 46623,
+                "median_income": 51599,
+                "similarity": 5.852
+            },
+            {
+                "zip_code": "2895",
+                "population": 43163,
+                "median_income": 54483,
+                "similarity": 2.6533
+            },
+            {
+                "zip_code": "92545",
+                "population": 45219,
+                "median_income": 56193,
+                "similarity": 1.6753
+            },
+            {
+                "zip_code": "89502",
+                "population": 46412,
+                "median_income": 58228,
+                "similarity": 1.5026
+            },
+            {
+                "zip_code": "1420",
+                "population": 41661,
+                "median_income": 65599,
+                "similarity": 1.3775
+            }
+        ]
+    },
+    {
+        "zip_code": "91701",
+        "count": 36,
+        "similar_zips": [
+            {
+                "zip_code": "94561",
+                "population": 44546,
+                "median_income": 119646,
+                "similarity": 7.1962
+            },
+            {
+                "zip_code": "91387",
+                "population": 46812,
+                "median_income": 111090,
+                "similarity": 3.7129
+            },
+            {
+                "zip_code": "10573",
+                "population": 41139,
+                "median_income": 105601,
+                "similarity": 2.1529
+            },
+            {
+                "zip_code": "91351",
+                "population": 32677,
+                "median_income": 104214,
+                "similarity": 1.7803
+            },
+            {
+                "zip_code": "92596",
+                "population": 35726,
+                "median_income": 114542,
+                "similarity": 1.6544
+            }
+        ]
+    },
+    {
+        "zip_code": "92392",
+        "count": 36,
+        "similar_zips": [
+            {
+                "zip_code": "92404",
+                "population": 64090,
+                "median_income": 62318,
+                "similarity": 5.4885
+            },
+            {
+                "zip_code": "34744",
+                "population": 60995,
+                "median_income": 63320,
+                "similarity": 3.3105
+            },
+            {
+                "zip_code": "60402",
+                "population": 64659,
+                "median_income": 71449,
+                "similarity": 2.4941
+            },
+            {
+                "zip_code": "85041",
+                "population": 62702,
+                "median_income": 65345,
+                "similarity": 2.2346
+            },
+            {
+                "zip_code": "75040",
+                "population": 63143,
+                "median_income": 70592,
+                "similarity": 1.7853
+            }
+        ]
+    },
+    {
+        "zip_code": "92583",
+        "count": 34,
+        "similar_zips": [
+            {
+                "zip_code": "95348",
+                "population": 35853,
+                "median_income": 62551,
+                "similarity": 8.8953
+            },
+            {
+                "zip_code": "89156",
+                "population": 31570,
+                "median_income": 61856,
+                "similarity": 7.6202
+            },
+            {
+                "zip_code": "92405",
+                "population": 31550,
+                "median_income": 55282,
+                "similarity": 4.0375
+            },
+            {
+                "zip_code": "95815",
+                "population": 26523,
+                "median_income": 54747,
+                "similarity": 3.2816
+            },
+            {
+                "zip_code": "1843",
+                "population": 28352,
+                "median_income": 72630,
+                "similarity": 2.162
+            }
+        ]
+    }
+]

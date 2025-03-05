@@ -1,8 +1,13 @@
-/* .container {
+.container {
   width: 100%;
   margin: 0 auto;
   padding: 20px;
   display: block;
+}
+
+.buttons {
+  display: flex;
+
 }
 
 .table-wrapper {
@@ -20,11 +25,6 @@ table th, table td {
   padding: 8px 12px;
   border: 1px solid #ccc;
   text-align: left;
-} */
-
-.buttons {
-  display: flex;
-
 }
 
 button {

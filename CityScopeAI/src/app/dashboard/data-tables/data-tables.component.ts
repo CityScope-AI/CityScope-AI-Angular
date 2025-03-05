@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartHandler } from './chart-handler';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { SliderModule } from 'primeng/slider';
+import { TableModule } from 'primeng/table';
+import { PrimeNGConfig } from 'primeng/api';
+import { ChartModule } from 'primeng/chart';
+import { DialogModule } from 'primeng/dialog';
+import { CommonModule } from '@angular/common';
+
 
 interface Filter {
   name: string;
+  columnIndex: number;
 }
 
 @Component({
@@ -18,117 +23,127 @@ interface Filter {
     FormsModule,
     InputTextModule,
     ButtonModule,
-    SliderModule
+    TableModule,
+    ChartModule,
+    DialogModule,
+    CommonModule
   ],
   templateUrl: './data-tables.component.html',
   styleUrls: ['./data-tables.component.css']
 })
 export class DataTablesComponent implements OnInit {
 
-  filters: Filter[] = [];
+  @ViewChild('dataTable', { static: false }) tableRef!: ElementRef; // Reference to p-table
+
+
+  showChart: boolean = false; // Flag to show/hide the chart
+  data: any;
+  options: any;
+
+  visible: boolean = false;
+
+    showDialog() {
+        this.visible = true;
+    }
+
+  constructor(private primengConfig: PrimeNGConfig) {}
+
+  filters: Filter[] = [
+    { name: 'City', columnIndex: 0 },
+    { name: 'State', columnIndex: 1 },
+    { name: 'Zip Code', columnIndex: 2 }
+  ];
+
   selectedFilter: Filter | undefined;
   searchValue: string = '';
 
-  table: HTMLTableElement | null = null;
-
-  /**
-   * We'll keep the raw CSV rows in this array so we can filter/rebuild the table.
-   * Each element of dataRows is an array of cell values for a single row.
-   */
-  dataRows: string[][] = [];
+  dataRows: string[][] = []; // Original full dataset
+  filteredDataRows: string[][] = []; // Filtered dataset for display
 
   async ngOnInit(): Promise<void> {
     await this.loadData();
+    this.primengConfig.ripple = true; // Enable button ripple effect
 
-    // Initialize dropdown filters
-    this.filters = [
-      { name: 'City' },
-      { name: 'State' },
-      { name: 'Zipcode' }
-    ];
+    const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color');
+
+        this.data = {
+            labels: ['A', 'B', 'C'],
+            datasets: [
+                {
+                    data: [540, 325, 702],
+                    backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--yellow-500'), documentStyle.getPropertyValue('--green-500')],
+                    hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
+                }
+            ]
+        };
+
+        this.options = {
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        color: textColor
+                    }
+                }
+            }
+        };
+
   }
 
-  /**
-   * 1) Fetch and parse CSV.
-   * 2) Store all row data in memory (dataRows).
-   * 3) Build the table initially with all rows.
+  /*
+   * Loads CSV data into `dataRows` and initializes `filteredDataRows`.
    */
   async loadData(): Promise<void> {
     const response = await fetch('../assets/data/merged_enrollment_demographics.csv');
     const csvText = await response.text();
     const lines = csvText.split(/\r?\n/);
 
-    // The first line is typically headers, so skip it:
+    // Skip headers and load data
     this.dataRows = lines.slice(1).map(line => line.split(','));
 
-    // Grab the table reference
-    this.table = document.getElementById('dataTable') as HTMLTableElement;
-    if (!this.table) return;
-
-    // Build the table for the first time (show everything)
-    this.updateTable(this.dataRows);
+    // Initially display all data
+    this.filteredDataRows = [...this.dataRows];
   }
 
   /**
-   * Clear out <tbody> and rebuild it with the given data.
-   */
-  updateTable(rows: string[][]): void {
-    if (!this.table) return;
-
-    // Remove any existing table body
-    let oldTbody = this.table.querySelector('tbody');
-    if (oldTbody) {
-      this.table.removeChild(oldTbody);
-    }
-
-    // Create a new <tbody>
-    const newTbody = this.table.createTBody();
-
-    // For each row in our data, insert into table
-    rows.forEach(rowArray => {
-      const row = newTbody.insertRow();
-      // Only take the first 8 columns
-      rowArray.slice(0, 8).forEach(cellValue => {
-        const td = row.insertCell();
-        td.textContent = cellValue;
-      });
-    });
-  }
-
-  /**
-   * Called whenever user types in the search bar or changes the dropdown.
-   * Filter dataRows based on selectedFilter + searchValue, then rebuild table.
+   * Filters the dataset based on selected dropdown and search input.
    */
   applyFilter(): void {
-    if (!this.table || !this.selectedFilter) return;
-
-    // Figure out which column index to search
-    let colIndex = 0;
-    switch (this.selectedFilter.name) {
-      case 'State':
-        colIndex = 1;
-        break;
-      case 'Zipcode':
-        colIndex = 2;
-        break;
-      default:
-        // Default to "City" column
-        colIndex = 0;
+    if (!this.selectedFilter || !this.searchValue.trim()) {
+      // If no filter is selected or input is empty, show all data
+      this.filteredDataRows = [...this.dataRows];
+      return;
     }
 
-    // Perform a case-insensitive search
+    const colIndex = this.selectedFilter.columnIndex;
     const filterText = this.searchValue.toLowerCase();
-    const filteredRows = this.dataRows.filter(row => {
-      return row[colIndex].toLowerCase().includes(filterText);
-    });
 
-    // Now rebuild table with only the filtered rows
-    this.updateTable(filteredRows);
+    // Filter dataset dynamically
+    this.filteredDataRows = this.dataRows.filter(row =>
+      row[colIndex]?.toLowerCase().includes(filterText)
+    );
   }
 
-  showPieChart(): void {
-    if (this.table) {
-      ChartHandler.showPieChart('City Distribution', this.table, 0, 'Count');
-    }
-  }
+  // showPieChart(): void {
+
+  //   this.data = {
+  //     labels: ['City A', 'City B', 'City C'],
+  //     datasets: [
+  //       {
+  //         data: [40, 30, 30], // Example data (modify as needed)
+  //         backgroundColor: ['#42A5F5', '#FFC107', '#66BB6A'],
+  //         hoverBackgroundColor: ['#64B5F6', '#FFCA28', '#81C784']
+  //       }
+  //     ]
+  //   };
+
+  //   this.options = {
+  //     plugins: {
+  //       legend: {
+  //         position: 'top'
+  //       }
+  //     }
+  //   };
+  // }
 }

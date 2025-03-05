@@ -1,29 +1,34 @@
 <app-header></app-header>
 <div class="dashboard-body">
-  <p-splitter
-  [minSizes]="[12,50]"
-  [panelSizes]="[10, 80]"
-  styleClass="mb-5">
-
+  <p-splitter [minSizes]="[12,50]" [panelSizes]="[10, 80]" styleClass="mb-5">
     <ng-template pTemplate>
-        <div class="col flex align-items-center justify-content-center">
-          <p-tabView>
-            <p-tabPanel header="Heat Maps">
-              <app-heatmap-page></app-heatmap-page>
+      <div class="col flex align-items-center justify-content-center">
+        <p-tabView>
+          <p-tabPanel header="Heat Maps">
+            <div class="heatmap-with-sidebar">
+              <!-- Heat map area -->
+              <div class="heatmap-content">
+                <app-heatmap-page></app-heatmap-page>
+              </div>
+              <!-- Sidebar area -->
+              <div class="sidebar" *ngIf="sidebarVisible">
+                <button class="close-btn" (click)="toggleSidebar()">×</button>
+                <h3>Area Information</h3>
+                <p *ngIf="selectedAreaData">Details: {{ selectedAreaData | json }}</p>
+              </div>
+            </div>
           </p-tabPanel>
-            <p-tabPanel
-            header="Demographics"
-            icon="pi pi-sign-out">
+          <p-tabPanel header="Demographics" icon="pi pi-sign-out">
             <app-demographics></app-demographics>
           </p-tabPanel>
-            <p-tabPanel header="Data Tables">
-              <app-data-tables></app-data-tables>
+          <p-tabPanel header="Data Tables">
+            <app-data-tables></app-data-tables>
           </p-tabPanel>
           <p-tabPanel header="Settings">
             <app-settings-page></app-settings-page>
           </p-tabPanel>
         </p-tabView>
-        </div>
+      </div>
     </ng-template>
   </p-splitter>
 </div>

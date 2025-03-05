@@ -1,15 +1,13 @@
-
-* {
-
-}
+/* Container for centering the content vertically and horizontally */
 .outside {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Full viewport height */
-  background-color: #222222; /* PrimeNG theme variable for background */
+  min-height: 100vh;
+  background-color: #222222;
 }
 
+/* Ring container styling */
 .ring {
   position: relative;
   width: 550px;
@@ -19,6 +17,7 @@
   align-items: center;
 }
 
+/* Animated ring elements */
 .ring i {
   position: absolute;
   inset: 0;
@@ -32,100 +31,64 @@
 }
 
 .ring i:nth-child(2) {
-  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
   animation: animate 4s linear infinite;
 }
 
 .ring i:nth-child(3) {
-  border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+  border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
   animation: animate2 10s linear infinite;
 }
 
-.ring:hover i {
-  border: 6px solid var(--clr);
-  filter: drop-shadow(0 0 20px var(--clr));
-}
-
-@keyframes animate {
-  0% {
-      transform: rotate(0deg);
-  }
-
-  100% {
-      transform: rotate(360deg);
-  }
-}
-
-@keyframes animate2 {
-  0% {
-      transform: rotate(360deg);
-  }
-
-  100% {
-      transform: rotate(0deg);
-  }
-}
-
+/* Login form styling with vertical layout */
 .login {
   position: absolute;
   width: 250px;
   height: 80%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   gap: 20px;
 }
 
-.login h2 {
-  font-size: 2em;
-  color: #fff;
-}
-
-.login .links {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-
-.login .links a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.inputBx p-password {
+/* Input box styling */
+.inputBx {
   width: 100%;
 }
 
-.inputBx p-password .p-password {
-  width: 100%;
-}
-
-.inputBx p-password .p-inputtext {
-  color: #fff; /* Or any other style matching the theme */
-  background-color: #222222;
-  border: none;
-  border-bottom: 2px solid #fff;
-  border-radius: 0;
-  transition: all 0.3s;
-}
-
-.inputBx p-password .p-inputtext:focus {
-  border-bottom: 2px solid #9d7406; /* Active color */
-  outline: none;
-  box-shadow: none; /* Avoid unwanted shadows */
-}
-
-.inputBx p-password .p-password-icon {
-  color: #9d7406; /* Toggle icon color */
-}
-
-.login-button {
-  padding-right: .2rem;
-}
+/* Button container ensuring buttons stack vertically if needed */
 .button-container {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Links styling */
+.links {
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Error and success messages */
+.error-message {
+  color: red;
+  text-align: center;
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+}
+
+/* Animation keyframes */
+@keyframes animate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes animate2 {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
 }

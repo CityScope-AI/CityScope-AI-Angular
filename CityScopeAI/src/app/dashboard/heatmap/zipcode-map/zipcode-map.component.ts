@@ -138,34 +138,51 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
     });
 
     this.mapView.on('click', (event) => {
-        this.mapView.hitTest(event).then((response) => {
-            console.log('Hit test response:', response);
-
-            const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
-
-            if (feature?.graphic) {
-                console.log('Graphic object:', feature.graphic);
-                console.log('Graphic attributes:', feature.graphic.attributes);
-
-                const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
-                console.log('Selected ZIP Code:', selectedZipCode);
-
-                const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
-                console.log('Fetched zip data:', zipData);
-
-                if (zipData) {
-                    const similarZips = zipData.similar_zips;
-                    console.log('Similar ZIP Codes:', similarZips);
-
-                    this.highlightSimilarZipCodes(selectedZipCode);
-                } else {
-                    console.warn(`No similar zip codes found for ${selectedZipCode}`);
-                }
-            } else {
-                console.warn('No graphic found in hit test response.');
-            }
-        });
-    });
+      this.mapView.hitTest(event).then((response) => {
+          const displayElement = document.getElementById('zipDataDisplay');
+          
+          if (!displayElement) return;
+  
+          // Clear previous content
+          displayElement.innerHTML = 'Click on a ZIP code to see details...';
+  
+          console.log('Hit test response:', response);
+          displayElement.innerHTML += `<p>Hit test response: ${JSON.stringify(response, null, 2)}</p>`;
+  
+          const feature = response.results.find((result) => result.type === 'graphic') as __esri.GraphicHit;
+  
+          if (feature?.graphic) {
+              console.log('Graphic object:', feature.graphic);
+              displayElement.innerHTML += `<p>Graphic object: ${JSON.stringify(feature.graphic, null, 2)}</p>`;
+  
+              console.log('Graphic attributes:', feature.graphic.attributes);
+              displayElement.innerHTML += `<p>Graphic attributes: ${JSON.stringify(feature.graphic.attributes, null, 2)}</p>`;
+  
+              const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
+              console.log('Selected ZIP Code:', selectedZipCode);
+              displayElement.innerHTML += `<p>Selected ZIP Code: <strong>${selectedZipCode}</strong></p>`;
+  
+              const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
+              console.log('Fetched zip data:', zipData);
+              displayElement.innerHTML += `<p>Fetched zip data: ${JSON.stringify(zipData, null, 2)}</p>`;
+  
+              if (zipData) {
+                  const similarZips = zipData.similar_zips;
+                  console.log('Similar ZIP Codes:', similarZips);
+                  displayElement.innerHTML += `<p>Similar ZIP Codes: ${JSON.stringify(similarZips, null, 2)}</p>`;
+  
+                  this.highlightSimilarZipCodes(selectedZipCode);
+              } else {
+                  console.warn(`No similar zip codes found for ${selectedZipCode}`);
+                  displayElement.innerHTML += `<p style="color: orange;">No similar zip codes found for ${selectedZipCode}</p>`;
+              }
+          } else {
+              console.warn('No graphic found in hit test response.');
+              displayElement.innerHTML += `<p style="color: red;">No graphic found in hit test response.</p>`;
+          }
+      });
+  });
+  
 }
 
 

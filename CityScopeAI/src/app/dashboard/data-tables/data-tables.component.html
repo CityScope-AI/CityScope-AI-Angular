@@ -12,7 +12,7 @@
 
     <!-- Search bar; triggers filtering on each keystroke -->
     <input
-    pInputText
+      pInputText
       type="text"
       [(ngModel)]="searchValue"
       (input)="applyFilter()"
@@ -20,8 +20,8 @@
       style="margin-bottom: 1rem;"
     />
     <p-button (click)="showPieChart()">Show Pie Chart</p-button>
+    <p-button (click)="downloadCSV()">Download CSV</p-button>
   </div>
-
 
   <div class="table-wrapper">
     <table id="dataTable" border="1">
@@ -35,6 +35,7 @@
           <th>Income</th>
           <th>Bachelor Degree</th>
           <th>Median Age</th>
+          <th>Annotation</th>
         </tr>
       </thead>
       <tbody></tbody>

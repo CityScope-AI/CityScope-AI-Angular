@@ -7,14 +7,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { RippleModule } from 'primeng/ripple';
 import { PrimeNGConfig } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';  // <-- RouterModule imported
 import { ImageModule } from 'primeng/image';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   GoogleAuthProvider, 
-  signInWithPopup,
-  sendPasswordResetEmail
+  signInWithPopup
 } from 'firebase/auth';
 import { FirebaseService } from '../../../firebase.service'; // adjust the path as needed
 
@@ -29,7 +28,8 @@ import { FirebaseService } from '../../../firebase.service'; // adjust the path 
     InputTextModule,
     FloatLabelModule,
     RippleModule,
-    ImageModule
+    ImageModule,
+    RouterModule  // <-- Include RouterModule so routerLink works
   ],
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
@@ -89,26 +89,6 @@ export class LoginPageComponent {
     } catch (error) {
       this.errorMessage = 'Failed to sign in with Google. Please try again.';
       console.error('Google sign in error:', error);
-    }
-  }
-
-  async forgotPassword() {
-    // Reset any previous messages
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    if (!this.email) {
-      this.errorMessage = 'Please enter your email address to reset your password.';
-      return;
-    }
-
-    try {
-      await sendPasswordResetEmail(this.firebaseService.auth, this.email);
-      this.successMessage = 'Password reset email sent. Please check your inbox.';
-      console.log('Password reset email sent.');
-    } catch (error) {
-      this.errorMessage = 'Failed to send password reset email. Please try again.';
-      console.error('Forgot password error:', error);
     }
   }
 }

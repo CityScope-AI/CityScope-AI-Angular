@@ -7,9 +7,9 @@ describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;
   let fixture: ComponentFixture<ForgotPasswordComponent>;
 
-  // Minimal stub for FirebaseService; adjust as needed
+  // Minimal stub for FirebaseService; extend as needed
   const firebaseServiceStub = {
-    auth: {} // Replace with additional stubbed methods/properties if needed
+    auth: {} // Stubbed auth object
   };
 
   // Minimal stub for Router

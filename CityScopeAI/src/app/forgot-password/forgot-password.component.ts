@@ -30,6 +30,12 @@ import { Router } from '@angular/router';
           label="Reset Password" 
           (click)="resetPassword()">
         </button>
+        <button 
+          pButton 
+          pRipple 
+          label="Back to Login" 
+          (click)="goBack()">
+        </button>
       </div>
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -39,7 +45,7 @@ import { Router } from '@angular/router';
       </div>
     </div>
   `,
-  styleUrls: ['./forgot-password.component.css'] // Create or update this file as needed.
+  styleUrls: ['./forgot-password.component.css']
 })
 export class ForgotPasswordComponent {
   email: string = '';
@@ -64,9 +70,14 @@ export class ForgotPasswordComponent {
     try {
       await sendPasswordResetEmail(this.firebaseService.auth, this.email);
       this.successMessage = 'Password reset email sent. Please check your inbox.';
+      console.log('Password reset email sent.');
     } catch (error) {
       this.errorMessage = 'Failed to send password reset email. Please try again.';
       console.error('Reset password error:', error);
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/login']);
   }
 }

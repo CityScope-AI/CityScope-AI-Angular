@@ -1,54 +1,59 @@
-    <!--ring div starts here-->
-  <div class="outside">
-    <div class="ring">
-        <i style="--clr:#042453;"></i>
-        <i style="--clr:#9d7406;"></i>
-        <i style="--clr:#eef2f2;"></i>
-        <form class="login">
-            <p-image
-            src="../assets/CityScope4.png"
-            alt="CityScope Logo"
-            width="300"
-            height="245"
-          ></p-image>
-            <div class="inputBx">
-              <p-floatLabel>
-                <input
-                pInputText
-                id="username"
-                [(ngModel)]="value"
-                [ngModelOptions]="{standalone: true}"/>
-                <label for="username">Username</label>
-            </p-floatLabel>
-            </div>
-            <div class="inputBx">
-              <p-floatLabel>
-                <p-password>
-                </p-password>
-                <label for="password">Password</label>
-              </p-floatLabel>
-            </div>
-            <div class="button-container">
-              <div class="login-button">
-                <button
-                  pButton
-                  pRipple
-                  label="Login"
-                  (click)="login()">
-                </button>
-              </div>
-              <div class="login-button">
-                <button
-                  pButton
-                  pRipple
-                  label="Sign up">
-                </button>
-            </div>
-          </div>
-            <div class="links">
-                <a href="#">Forgot Password?</a>
-            </div>
-        </form>
-    </div>
+<!-- login-page.component.html -->
+<div class="outside">
+  <div class="ring">
+    <i style="--clr:#042453;"></i>
+    <i style="--clr:#9d7406;"></i>
+    <i style="--clr:#eef2f2;"></i>
+    <form class="login">
+      <p-image
+        src="../assets/CityScope4.png"
+        alt="CityScope Logo"
+        width="300"
+        height="245"
+      ></p-image>
+      <div class="inputBx">
+        <p-floatLabel>
+          <input
+            pInputText
+            id="email"
+            [(ngModel)]="email"
+            [ngModelOptions]="{standalone: true}"
+          />
+          <label for="email">Email</label>
+        </p-floatLabel>
+      </div>
+      <div class="inputBx">
+        <p-floatLabel>
+          <p-password
+            [(ngModel)]="password"
+            [ngModelOptions]="{standalone: true}">
+          </p-password>
+          <label for="password">Password</label>
+        </p-floatLabel>
+      </div>
+      <div class="button-container">
+        <div class="login-button">
+          <button
+            pButton
+            pRipple
+            label="Login"
+            (click)="login()">
+          </button>
+        </div>
+        <div class="login-button">
+          <button
+            pButton
+            pRipple
+            label="Sign up">
+          </button>
+        </div>
+      </div>
+      <div class="links">
+        <a href="#">Forgot Password?</a>
+      </div>
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </form>
   </div>
-    <!--ring div ends here-->
+</div>

@@ -1,9 +1,22 @@
 .map-container {
   width: 100%;
-  height: 100vh; /* Fullscreen map */
+  height: 500px; /* Keep the map fixed at 500px */
 }
 
 #zipcodeMapView {
   width: 100%;
   height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.data-display {
+  width: 100%;
+  height: 200px; /* Example height for the data area */
+  background-color: #1f2937;
+  border-top: 1px solid #1f2937;
+  padding: 10px;
+  text-align: center;
+  font-size: 25px;
+  color: white;
 }

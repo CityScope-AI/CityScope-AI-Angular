@@ -13,7 +13,8 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   GoogleAuthProvider, 
-  signInWithPopup 
+  signInWithPopup,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { FirebaseService } from '../../../firebase.service'; // adjust the path as needed
 
@@ -37,6 +38,7 @@ export class LoginPageComponent {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(
     private primengConfig: PrimeNGConfig,
@@ -87,6 +89,26 @@ export class LoginPageComponent {
     } catch (error) {
       this.errorMessage = 'Failed to sign in with Google. Please try again.';
       console.error('Google sign in error:', error);
+    }
+  }
+
+  async forgotPassword() {
+    // Reset any previous messages
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    if (!this.email) {
+      this.errorMessage = 'Please enter your email address to reset your password.';
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(this.firebaseService.auth, this.email);
+      this.successMessage = 'Password reset email sent. Please check your inbox.';
+      console.log('Password reset email sent.');
+    } catch (error) {
+      this.errorMessage = 'Failed to send password reset email. Please try again.';
+      console.error('Forgot password error:', error);
     }
   }
 }

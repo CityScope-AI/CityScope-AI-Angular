@@ -60,6 +60,29 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
 
     this.loadZipSimilarityData();
   }
+  private updateZipCodeDisplay(zipCode: string): void {
+    const displayElement = document.getElementById('zipDataDisplay');
+    if (!displayElement) return;
+
+    // Clear the display and add the selected ZIP code
+    displayElement.innerHTML = `<p>Selected ZIP Code: <strong>${zipCode}</strong></p>`;
+
+    // Find similar ZIP codes and display them
+    const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === zipCode);
+    if (zipData) {
+        const similarZipCodes = zipData.similar_zips.map((zip) => zip.zip_code).join(', ');
+        displayElement.innerHTML += `
+            <p>Similar ZIP Codes: <strong>${similarZipCodes}</strong></p>
+        `;
+    } else {
+        displayElement.innerHTML += `<p style="color: orange;">No similar zip codes found for ${zipCode}</p>`;
+    }
+
+    // Dynamically adjust the div height based on content
+    const contentHeight = displayElement.scrollHeight;
+    displayElement.style.height = `${contentHeight}px`;
+}
+
 
   ngOnDestroy(): void {
     if (this.basemapSubscription) {
@@ -161,6 +184,8 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
               const selectedZipCode = feature.graphic.attributes?.['ZCTA5CE10'];
               console.log('Selected ZIP Code:', selectedZipCode);
               displayElement.innerHTML += `<p>Selected ZIP Code: <strong>${selectedZipCode}</strong></p>`;
+
+              this.updateZipCodeDisplay(selectedZipCode);
   
               const zipData = this.zipSimilarityData.find((zip) => zip.zip_code === selectedZipCode);
               console.log('Fetched zip data:', zipData);
@@ -169,7 +194,6 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
               if (zipData) {
                   const similarZips = zipData.similar_zips;
                   console.log('Similar ZIP Codes:', similarZips);
-                  displayElement.innerHTML += `<p>Similar ZIP Codes: ${JSON.stringify(similarZips, null, 2)}</p>`;
   
                   this.highlightSimilarZipCodes(selectedZipCode);
               } else {

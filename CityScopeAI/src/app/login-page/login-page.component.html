@@ -1,4 +1,3 @@
-<!-- login-page.component.html -->
 <div class="outside">
   <div class="ring">
     <i style="--clr:#042453;"></i>
@@ -44,7 +43,19 @@
           <button
             pButton
             pRipple
-            label="Sign up">
+            label="Sign up"
+            (click)="signUp()">
+          </button>
+        </div>
+      </div>
+      <!-- Google Sign-In Button -->
+      <div class="button-container">
+        <div class="login-button">
+          <button
+            pButton
+            pRipple
+            label="Sign in with Google"
+            (click)="signInWithGoogle()">
           </button>
         </div>
       </div>

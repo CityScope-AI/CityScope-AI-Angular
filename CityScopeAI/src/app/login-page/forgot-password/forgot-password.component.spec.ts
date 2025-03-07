@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForgotPasswordComponent } from './forgot-password.component';
 import { Router } from '@angular/router';
-import { FirebaseService } from '../../../firebase.service';
+import { FirebaseService } from '../../../../firebase.service';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotPasswordComponent;

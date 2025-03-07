@@ -9,13 +9,16 @@ import { RippleModule } from 'primeng/ripple';
 import { PrimeNGConfig } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';  // <-- RouterModule imported
 import { ImageModule } from 'primeng/image';
-import { 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  GoogleAuthProvider, 
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithPopup
 } from 'firebase/auth';
 import { FirebaseService } from '../../../firebase.service'; // adjust the path as needed
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -29,8 +32,10 @@ import { FirebaseService } from '../../../firebase.service'; // adjust the path 
     FloatLabelModule,
     RippleModule,
     ImageModule,
-    RouterModule  // <-- Include RouterModule so routerLink works
+    RouterModule,  // <-- Include RouterModule so routerLink works
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
 })
@@ -43,7 +48,8 @@ export class LoginPageComponent {
   constructor(
     private primengConfig: PrimeNGConfig,
     private router: Router,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -52,15 +58,12 @@ export class LoginPageComponent {
 
   async login() {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        this.firebaseService.auth,
-        this.email,
-        this.password
-      );
-      console.log('User logged in:', userCredential);
+      const userCredential = await signInWithEmailAndPassword(this.firebaseService.auth, this.email, this.password);
+      this.messageService.add({ severity: 'success', summary: 'Login successful', detail: 'logged in' });
+      delay(13000)
       this.router.navigate(['/dashboard']);
     } catch (error) {
-      this.errorMessage = 'Invalid credentials. Please try again.';
+      this.messageService.add({ severity: 'error', summary: 'Login failed', detail: 'Invalid credentials. Please try again.' });
       console.error('Login error:', error);
     }
   }
@@ -75,7 +78,7 @@ export class LoginPageComponent {
       console.log('User signed up:', userCredential);
       this.router.navigate(['/dashboard']);
     } catch (error) {
-      this.errorMessage = 'Sign up failed. Please try again.';
+      this.messageService.add({ severity: 'error', summary: 'Login failed', detail: 'Invalid credentials. Please try again.' });
       console.error('Sign up error:', error);
     }
   }

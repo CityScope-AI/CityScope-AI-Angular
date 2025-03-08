@@ -7,7 +7,6 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { SplitterModule } from 'primeng/splitter';
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
-import { SettingsPageComponent } from "./settings-page/settings-page.component";
 import { HeatmapPageComponent } from "./heatmap/heatmap-page.component";
 import { ButtonModule } from 'primeng/button';
 import { DataTablesComponent } from "./data-tables/data-tables.component";
@@ -23,7 +22,6 @@ import { DemographicsComponent } from "./demographics/demographics.component";
     CardModule,
     HeaderComponent,
     TabViewModule,
-    SettingsPageComponent,
     HeatmapPageComponent,
     ButtonModule,
     DataTablesComponent,

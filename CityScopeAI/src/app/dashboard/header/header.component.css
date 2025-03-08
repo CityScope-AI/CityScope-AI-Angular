@@ -11,7 +11,7 @@ p-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
 }
 
 .timestamp {
@@ -37,4 +37,6 @@ p-card {
   display: block;
   border-radius: 50%; /* Optional: Makes the image circular */
 }
+
+
 

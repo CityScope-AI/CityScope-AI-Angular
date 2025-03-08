@@ -15,12 +15,24 @@
         <h2 class="title">CityScope AI</h2>
       </div>
 
-      <!-- Theme switch -->
-      <p-inputSwitch
-        class="theme-switch"
-        [(ngModel)]="checked"
-        (click)="onThemeChange(checked ? 'dark' : 'light')">
-      </p-inputSwitch>
+      <div class="settings-button">
+        <p-button
+        icon="pi pi-cog"
+        (click)="openSidebar()" />
+        <p-sidebar [(visible)]="sidebarVisible" position="right">
+          <h3>Settings</h3>
+
+          <!-- Theme switch -->
+          <p-inputSwitch
+            class="theme-switch"
+            [(ngModel)]="checked"
+            (click)="onThemeChange(checked ? 'dark' : 'light')">
+          </p-inputSwitch>
+          <button
+            pButton
+            (click)="logout()">Logout</button>
+        </p-sidebar>
+      </div>
     </div>
   </p-card>
 </div>

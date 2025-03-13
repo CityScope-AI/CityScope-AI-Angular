@@ -95,3 +95,11 @@ body {
   min-width: 0;
 }
 
+.p-sidebar .p-sidebar-header {
+  padding: 1rem;
+  padding-bottom: 0rem;
+}
+h3.ng-tns-c4029148367-1 {
+  margin: 0;
+}
+

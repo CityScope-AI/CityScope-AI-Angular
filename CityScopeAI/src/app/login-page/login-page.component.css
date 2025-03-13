@@ -40,6 +40,31 @@
   animation: animate2 10s linear infinite;
 }
 
+.ring:hover i {
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
+}
+
+@keyframes animate {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+@keyframes animate2 {
+  0% {
+      transform: rotate(360deg);
+  }
+
+  100% {
+      transform: rotate(0deg);
+  }
+}
+
 /* Login form styling with vertical layout */
 .login {
   position: absolute;

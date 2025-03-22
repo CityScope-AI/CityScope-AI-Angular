@@ -1,5 +1,5 @@
 #heatmapView {
-  width: 100%;
+  width: 80%;
   height: 500px; /* Set a fixed height */
   max-height: 500px; /* Prevent it from exceeding limits */
   overflow: hidden; /* Prevent layout resizing due to overflow */
@@ -7,7 +7,7 @@
 
 }
 #voronoiView {
-  width: 100%;
+  width: 80%;
   height: 500px; /* Set a fixed height */
   max-height: 500px; /* Prevent it from exceeding limits */
   overflow: hidden; /* Prevent layout resizing due to overflow */
@@ -15,7 +15,7 @@
 
 }
 #zipcodeView{
-  width: 100%;
+  width: 80%;
   height: 500px; /* Set a fixed height */
   max-height: 500px; /* Prevent it from exceeding limits */
   overflow: hidden; /* Prevent layout resizing due to overflow */
@@ -24,7 +24,7 @@
 }
 
 #statesView{
-  width: 100%;
+  width: 80%;
   height: 500px; /* Set a fixed height */
   max-height: 500px; /* Prevent it from exceeding limits */
   overflow: hidden; /* Prevent layout resizing due to overflow */

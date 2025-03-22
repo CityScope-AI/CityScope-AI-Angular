@@ -8,11 +8,14 @@
 .heatmap-content {
   flex: 1;
   margin-right: 20px; /* Optional: add space between heatmap and sidebar */
+  
 }
 
 .sidebar {
-  width: 300px;
+  width: 20vw;
+  height: 80vh;
   background: #fff;
+  color: black;
   box-shadow: -2px 0 5px rgba(0,0,0,0.2);
   padding: 20px;
   overflow-y: auto;

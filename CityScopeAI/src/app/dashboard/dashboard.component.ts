@@ -15,7 +15,6 @@ import { ZipcodeMapComponent } from './heatmap/zipcode-map/zipcode-map.component
 import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -36,7 +35,6 @@ import * as Papa from 'papaparse';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  activeMap: 'heatmap' | 'zipcode' = 'heatmap'; // Default to heatmap
   menuItems: MenuItem[];
   sidebarVisible: boolean = true;
   selectedAreaData: any;

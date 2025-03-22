@@ -64,17 +64,21 @@ export class DashboardComponent implements OnInit {
 
   // Called when a ZIP code is selected in ZipcodeMapComponent
   onZipSelected(data: any) {
+    console.log('📥 Dashboard received ZIP selection:', data); // Add this!
     this.selectedAreaData = data;
     this.sidebarVisible = true;
-
+  
     const match = this.allDemographicRows.find(row => row.Zip_Code === data.zip_code);
+    console.log('🔍 Matching row in CSV:', match); // Add this too
+  
     if (match) {
       this.demographicData = match;
     } else {
       this.demographicData = null;
-      console.warn('No demographic data found for ZIP:', data.zip_code);
+      console.warn('⚠️ No demographic data found for ZIP:', data.zip_code);
     }
   }
+  
 
   private loadDemographics(): void {
     this.http.get('assets/data/census_zipcode_percentages.csv', { responseType: 'text' })

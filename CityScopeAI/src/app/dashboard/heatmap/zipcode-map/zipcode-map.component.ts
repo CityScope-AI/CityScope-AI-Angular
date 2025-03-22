@@ -159,6 +159,7 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
                 if (zipData) {
                     const similarZips = zipData.similar_zips;
                     console.log('Similar ZIP Codes:', similarZips);
+                    console.log('📤 Emitting zipSelected with data:', zipData);
                     this.zipSelected.emit(zipData);
 
                     this.highlightSimilarZipCodes(selectedZipCode);

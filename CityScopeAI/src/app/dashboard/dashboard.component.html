@@ -9,10 +9,12 @@
               <!-- Heat map area -->
               <div class="heatmap-content">
                 <!-- <app-heatmap-page></app-heatmap-page> -->
-                <app-heatmap-page #heatmapPage></app-heatmap-page>
+                <!-- <app-heatmap-page #heatmapPage></app-heatmap-page> -->
+                <app-heatmap-page #heatmapPage (zipSelected)="onZipSelected($event)"></app-heatmap-page>
               </div>
               <!-- Sidebar area -->
-              <div class="sidebar" *ngIf="sidebarVisible && heatmapPage.activeMap === 'zipcodes'">
+              <!-- <div class="sidebar" *ngIf="sidebarVisible && heatmapPage.activeMap === 'zipcodes'"> -->
+                <div class="sidebar" *ngIf="sidebarVisible">
                 <button class="close-btn" (click)="toggleSidebar()">×</button>
                 <h3>Area Information</h3>
                 <div *ngIf="selectedAreaData">

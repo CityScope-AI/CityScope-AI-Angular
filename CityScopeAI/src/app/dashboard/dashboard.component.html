@@ -8,13 +8,31 @@
             <div class="heatmap-with-sidebar">
               <!-- Heat map area -->
               <div class="heatmap-content">
-                <app-heatmap-page></app-heatmap-page>
+                <!-- <app-heatmap-page></app-heatmap-page> -->
+                <app-heatmap-page #heatmapPage></app-heatmap-page>
               </div>
               <!-- Sidebar area -->
-              <div class="sidebar" *ngIf="sidebarVisible">
+              <div class="sidebar" *ngIf="sidebarVisible && heatmapPage.activeMap === 'zipcodes'">
                 <button class="close-btn" (click)="toggleSidebar()">×</button>
                 <h3>Area Information</h3>
-                <p *ngIf="selectedAreaData">Details: {{ selectedAreaData | json }}</p>
+                <div *ngIf="selectedAreaData">
+                  <h3>ZIP Code: {{ selectedAreaData.zip_code }}</h3>
+                
+                  <div *ngIf="demographicData">
+                    <p><strong>Population:</strong> {{ demographicData.Population }}</p>
+                    <p><strong>Median Income:</strong> ${{ demographicData.Median_Income }}</p>
+                    <p><strong>Median Age:</strong> {{ demographicData.Median_Age }}</p>
+                    <p><strong>% Bachelor's Degree:</strong> {{ demographicData.Bachelor_Degree }}</p>
+                    <p><strong>% Graduate Degree:</strong> {{ demographicData.Graduate_Professional_Degree }}</p>
+                    <p><strong>White Alone:</strong> {{ demographicData.White_Alone }}</p>
+                    <p><strong>Black Alone:</strong> {{ demographicData.Black_Alone }}</p>
+                    <p><strong>Hispanic/Latino:</strong> {{ demographicData.Hispanic_Latino }}</p>
+                    <p><strong>Unemployment:</strong> {{ demographicData.Unemployment }}</p>
+                    <p><strong>Below Poverty Level:</strong> {{ demographicData.Below_Poverty_Level }}</p>
+                    <p><strong>Median Home Value:</strong> ${{ demographicData.Median_Home_Value }}</p>
+                    <!-- Add more fields as needed -->
+                  </div>
+                </div>                
               </div>
             </div>
           </p-tabPanel>

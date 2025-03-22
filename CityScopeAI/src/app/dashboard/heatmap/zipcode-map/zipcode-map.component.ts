@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
 import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
@@ -16,6 +16,7 @@ import Extent from '@arcgis/core/geometry/Extent';
 import TimeExtent from '@arcgis/core/TimeExtent';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import FeatureEffect from '@arcgis/core/layers/support/FeatureEffect';
+
 
 
 
@@ -40,6 +41,8 @@ interface ZipSimilarityData {
   styleUrls: ['./zipcode-map.component.css'],
 })
 export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
+
+  @Output() zipSelected = new EventEmitter<ZipSimilarityData>();
   private mapView!: MapView;
   private zipCodeLayer!: GeoJSONLayer;
 
@@ -156,6 +159,7 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
                 if (zipData) {
                     const similarZips = zipData.similar_zips;
                     console.log('Similar ZIP Codes:', similarZips);
+                    this.zipSelected.emit(zipData);
 
                     this.highlightSimilarZipCodes(selectedZipCode);
                 } else {

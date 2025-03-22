@@ -81,19 +81,20 @@ export class DashboardComponent implements OnInit {
   
 
   private loadDemographics(): void {
-    this.http.get('assets/data/census_zipcode_percentages.csv', { responseType: 'text' })
+    this.http.get('assets/data/final_census_with_images.csv', { responseType: 'text' })
       .subscribe(csvData => {
         Papa.parse(csvData, {
           header: true,
           skipEmptyLines: true,
           complete: result => {
             this.allDemographicRows = result.data;
-            console.log('Demographic CSV loaded:', result.data);
+            console.log('✅ Final CSV loaded:', result.data);
           },
           error: (error: any) => {
-            console.error('CSV parsing error:', error);
+            console.error('❌ CSV parsing error:', error);
           }          
         });
       });
   }
+  
 }

@@ -32,11 +32,10 @@ export class DataTablesComponent implements OnInit {
   table: HTMLTableElement | null = null;
 
   /**
-   * Each row is an array of:
-   * [City, State, Zip Code, Term, Population, Income, Bachelor Degree, Median Age, Annotation]
+   * We'll keep the raw CSV rows in this array so we can filter/rebuild the table.
+   * Each element of dataRows is an array of cell values for a single row.
    */
   dataRows: string[][] = [];
-  filteredRows: string[][] = [];
 
   async ngOnInit(): Promise<void> {
     await this.loadData();
@@ -51,52 +50,33 @@ export class DataTablesComponent implements OnInit {
 
   /**
    * 1) Fetch and parse CSV.
-   * 2) Map CSV columns to our table order and add an Annotation column.
-   * 3) Build the table with all rows.
+   * 2) Store all row data in memory (dataRows).
+   * 3) Build the table initially with all rows.
    */
   async loadData(): Promise<void> {
     const response = await fetch('../assets/data/merged_enrollment_demographics.csv');
     const csvText = await response.text();
-    const lines = csvText.split(/\r?\n/).filter(line => line.trim().length > 0);
+    const lines = csvText.split(/\r?\n/);
 
-    // Assume the first line is a header.
-    // CSV columns are assumed to be in the following order:
-    // [0]: City, [1]: State, [2]: Zip Code, [3]: Population, [4]: Income, [5]: Bachelor Degree, [6]: Median Age, [7]: Term
-    // Our table expects: City, State, Zip Code, Term, Population, Income, Bachelor Degree, Median Age, Annotation
-    this.dataRows = lines.slice(1).map(line => {
-      const columns = line.split(',');
-      return [
-        columns[0] || '',   // City
-        columns[1] || '',   // State
-        columns[2] || '',   // Zip Code
-        columns[4] || '',   // Term (CSV column 8 becomes our 4th column)
-        columns[6] || '',   // Population (CSV column 4 becomes our 5th)
-        columns[7] || '',   // Income (CSV column 5 becomes our 6th)
-        columns[9] || '',   // Bachelor Degree (CSV column 6 becomes our 7th)
-        columns[8] || '',   // Median Age (CSV column 7 becomes our 8th)
-        ''                  // Annotation (newly added column)
-      ];
-    });
-
-    // Initially, all rows are displayed.
-    this.filteredRows = [...this.dataRows];
+    // The first line is typically headers, so skip it:
+    this.dataRows = lines.slice(1).map(line => line.split(','));
 
     // Grab the table reference
     this.table = document.getElementById('dataTable') as HTMLTableElement;
     if (!this.table) return;
 
     // Build the table for the first time (show everything)
-    this.updateTable(this.filteredRows);
+    this.updateTable(this.dataRows);
   }
 
   /**
-   * Clears out <tbody> and rebuilds it with the given data.
+   * Clear out <tbody> and rebuild it with the given data.
    */
   updateTable(rows: string[][]): void {
     if (!this.table) return;
 
     // Remove any existing table body
-    const oldTbody = this.table.querySelector('tbody');
+    let oldTbody = this.table.querySelector('tbody');
     if (oldTbody) {
       this.table.removeChild(oldTbody);
     }
@@ -104,37 +84,25 @@ export class DataTablesComponent implements OnInit {
     // Create a new <tbody>
     const newTbody = this.table.createTBody();
 
-    // For each row in our data, insert cells
+    // For each row in our data, insert into table
     rows.forEach(rowArray => {
       const row = newTbody.insertRow();
-      // Create cells for the first 8 columns (displayed in header order)
+      // Only take the first 8 columns
       rowArray.slice(0, 8).forEach(cellValue => {
         const td = row.insertCell();
         td.textContent = cellValue;
       });
-      // Insert the Annotation column as an input field.
-      const td = row.insertCell();
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.placeholder = 'Add annotation';
-      input.value = rowArray[8] || '';
-      input.addEventListener('input', (event: Event) => {
-        const target = event.target as HTMLInputElement;
-        rowArray[8] = target.value;
-      });
-      td.appendChild(input);
     });
   }
 
   /**
-   * Called when the user types in the search bar or changes the dropdown.
-   * Filters dataRows based on the selected filter and search value, then rebuilds the table.
+   * Called whenever user types in the search bar or changes the dropdown.
+   * Filter dataRows based on selectedFilter + searchValue, then rebuild table.
    */
   applyFilter(): void {
     if (!this.table || !this.selectedFilter) return;
 
-    // Determine which column to search.
-    // Our mapping: 0: City, 1: State, 2: Zip Code.
+    // Figure out which column index to search
     let colIndex = 0;
     switch (this.selectedFilter.name) {
       case 'State':
@@ -144,45 +112,18 @@ export class DataTablesComponent implements OnInit {
         colIndex = 2;
         break;
       default:
+        // Default to "City" column
         colIndex = 0;
     }
 
-    // Perform a case-insensitive search on the specified column.
+    // Perform a case-insensitive search
     const filterText = this.searchValue.toLowerCase();
-    this.filteredRows = this.dataRows.filter(row => {
+    const filteredRows = this.dataRows.filter(row => {
       return row[colIndex].toLowerCase().includes(filterText);
     });
 
-    // Rebuild table with only the filtered rows.
-    this.updateTable(this.filteredRows);
-  }
-
-  /**
-   * Downloads a CSV file containing only the currently filtered rows,
-   * including the Annotation column.
-   */
-  downloadCSV(): void {
-    const header = 'City,State,Zip Code,Term,Population,Income,Bachelor Degree,Median Age,Annotation\n';
-    let csvContent = header;
-    this.filteredRows.forEach(row => {
-      const rowData = row.map(cell => {
-        // Escape commas and quotes if needed.
-        if (cell && (cell.indexOf(',') !== -1 || cell.indexOf('"') !== -1)) {
-          return `"${cell.replace(/"/g, '""')}"`;
-        }
-        return cell;
-      });
-      csvContent += rowData.join(',') + '\n';
-    });
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'filtered_data.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Now rebuild table with only the filtered rows
+    this.updateTable(filteredRows);
   }
 
   showPieChart(): void {

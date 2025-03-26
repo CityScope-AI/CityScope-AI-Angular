@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { PrimeNGConfig } from 'primeng/api';
 import { Sidebar, SidebarModule } from 'primeng/sidebar';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 @Component({
@@ -25,7 +26,8 @@ import { Sidebar, SidebarModule } from 'primeng/sidebar';
     ToolbarModule,
     InputTextModule,
     RippleModule,
-    SidebarModule
+    SidebarModule,
+    SidebarComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -56,22 +58,14 @@ export class HeaderComponent implements OnInit{
     }, 1000);
   }
 
+  ngOnInit(): void {
+    this.primengConfig.ripple = true;
+  }
   logout() {
     // Perform logout functionality here
     console.log('Logout button clicked');
     // Example: Redirect to the login page
     this.router.navigate(['/login']);
-  }
-
-  ngOnInit(): void {
-    this.themeService.setTheme(this.selectedTheme);
-    this.primengConfig.ripple = true;
-
-  }
-
-  onThemeChange(theme: string): void {
-    this.selectedTheme = theme;
-    this.themeService.setTheme(theme);
   }
 
   openSidebar() {

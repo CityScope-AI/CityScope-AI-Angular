@@ -20,17 +20,11 @@
         icon="pi pi-cog"
         (click)="openSidebar()" />
         <p-sidebar [(visible)]="sidebarVisible" position="right">
-          <h3>Settings</h3>
-
-          <!-- Theme switch -->
-          <p-inputSwitch
-            class="theme-switch"
-            [(ngModel)]="checked"
-            (click)="onThemeChange(checked ? 'dark' : 'light')">
-          </p-inputSwitch>
+          <app-sidebar></app-sidebar>
           <button
-            pButton
-            (click)="logout()">Logout</button>
+          pButton
+          icon="pi pi-sign-out"
+          (click)="logout()"></button>
         </p-sidebar>
       </div>
     </div>

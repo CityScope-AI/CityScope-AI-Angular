@@ -11,6 +11,8 @@ import { Router, RouterModule } from '@angular/router';  // <-- RouterModule imp
 import { ImageModule } from 'primeng/image';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { AuthService } from '../../services/auth.service';
+
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,

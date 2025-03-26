@@ -31,6 +31,9 @@ import os
 import requests
 from dotenv import load_dotenv
 
+from dash import ctx, dcc, html, Input, Output, State, callback_context
+from urllib.parse import urlparse, parse_qs
+
 # Load environment variables
 load_dotenv(".env.local")
 API_KEY = os.getenv("TOGETHER_AI_KEY")
@@ -176,8 +179,27 @@ def generate_hover_info(data):
 
 app = dash.Dash(__name__)
 
+@app.callback(
+    Output('cbu-zipcode-dropdown', 'value'),
+    Input('url', 'href')
+)
+def preselect_zip_from_url(href):
+    if not href:
+        return 'all'
+    
+    parsed_url = urlparse(href)
+    query_params = parse_qs(parsed_url.query)
+    selected_zip = query_params.get('selected_zip', ['all'])[0]
+
+    if selected_zip in cbu_zipcodes:
+        return selected_zip
+    return 'all'
+
+
+
 # App layout
 app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),  # Add to your layout
     html.Div([
 
         # Sidebar with filter options
@@ -523,7 +545,7 @@ def update_graph(selected_dimension, selected_feature, feature_range, selected_c
         if not selected_cbu_data.empty:
             selected_cbu_scaled = scaler.transform(selected_cbu_data[features])
             distances_to_non_cbu = euclidean_distances(non_cbu_census_data_scaled, selected_cbu_scaled)
-            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:10]  # Changed to top 10
+            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:5]  # Changed to top 10
             top_10_non_cbu_data = non_cbu_census_data.iloc[top_10_indices]
 
             # Apply feature-based filtering to the selected top 10 ZIP codes

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
 import GeoJSONLayer from '@arcgis/core/layers/GeoJSONLayer';
@@ -16,6 +16,7 @@ import Extent from '@arcgis/core/geometry/Extent';
 import TimeExtent from '@arcgis/core/TimeExtent';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import FeatureEffect from '@arcgis/core/layers/support/FeatureEffect';
+
 
 
 
@@ -40,6 +41,8 @@ interface ZipSimilarityData {
   styleUrls: ['./zipcode-map.component.css'],
 })
 export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
+
+  @Output() zipSelected = new EventEmitter<ZipSimilarityData>();
   private mapView!: MapView;
   private zipCodeLayer!: GeoJSONLayer;
 
@@ -134,6 +137,8 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
     this.zipCodeLayer.when(() => {
         this.mapView.goTo(this.zipCodeLayer.fullExtent);
         // Initialize map with default opacity for all zip codes
+          // ✅ Highlight top 50 on load
+        this.highlightInitialTop50ZipCodes();
         this.highlightSimilarZipCodes('');
     });
 
@@ -156,6 +161,8 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
                 if (zipData) {
                     const similarZips = zipData.similar_zips;
                     console.log('Similar ZIP Codes:', similarZips);
+                    console.log('📤 Emitting zipSelected with data:', zipData);
+                    this.zipSelected.emit(zipData);
 
                     this.highlightSimilarZipCodes(selectedZipCode);
                 } else {
@@ -167,6 +174,33 @@ export class ZipcodeMapComponent implements AfterViewInit, OnDestroy {
         });
     });
 }
+
+private highlightInitialTop50ZipCodes(): void {
+  const top50Zips = this.zipSimilarityData.map(z => z.zip_code);
+
+  if (!top50Zips.length) return;
+
+  this.zipCodeLayer.queryFeatures().then((result) => {
+    const availableZips = result.features.map(f => f.attributes['ZCTA5CE10']);
+    const missing = top50Zips.filter(z => !availableZips.includes(z));
+    if (missing.length > 0) {
+      console.warn('Some top 50 ZIPs missing in map data:', missing);
+    }
+
+    // Apply highlight effect to top 50 ZIPs
+    this.zipCodeLayer.featureEffect = new FeatureEffect({
+      filter: new FeatureFilter({
+        where: `ZCTA5CE10 IN (${top50Zips.map(z => `'${z}'`).join(',')})`,
+      }),
+      includedEffect: 'drop-shadow(2px, 2px, 2px) brightness(1.3)', // customize as needed
+      excludedEffect: 'opacity(40%)',
+      excludedLabelsVisible: false,
+    });
+
+    console.log('🌟 Highlighted initial top 50 ZIPs:', top50Zips);
+  });
+}
+
 
 
   private highlightSimilarZipCodes(selectedZipCode: string): void {

@@ -9,13 +9,13 @@ import { getAuth } from 'firebase/auth';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyD8i-4ZDnHzDJa9rRuF1QTTKhX3x4RFVZk",
-  authDomain: "cityscopeai.firebaseapp.com",
-  projectId: "cityscopeai",
-  storageBucket: "cityscopeai.firebasestorage.app",
-  messagingSenderId: "1060544253230",
-  appId: "1:1060544253230:web:8685e8c8d1be407994bebf",
-  measurementId: "G-VJYTRB4X7P"
+  apiKey: "AIzaSyClgoR6scqGBY6E-9Jqod_YvxmFf3fR1lY",
+  authDomain: "cityscope-ai-angular.firebaseapp.com",
+  projectId: "cityscope-ai-angular",
+  storageBucket: "cityscope-ai-angular.firebasestorage.app",
+  messagingSenderId: "959489279737",
+  appId: "1:959489279737:web:4b027ffd9b44d062a60428",
+  measurementId: "G-253YG8TMCM"
 };
 
 @Injectable({

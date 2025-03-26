@@ -208,10 +208,10 @@ app.layout = html.Div([
                 'position': 'absolute',
                 'top': '10px',
                 'left': '10px',
-                'font-size': '24px',
+                'fontSize': '24px',
                 'cursor': 'pointer',
                 'background-color': 'lightgray',
-                'z-index': '2',
+                'zIndex': '2',
             }),
 
             html.Div([
@@ -289,7 +289,7 @@ app.layout = html.Div([
                 'background-color': '#f8f9fa',
                 'padding': '10px',
                 'transition': '0.3s',
-                'z-index': '1',
+                'zIndex': '1',
                 'overflow': 'auto'
             })
         ]),
@@ -297,7 +297,7 @@ app.layout = html.Div([
         # Main content (Graph)
         html.Div([
             dcc.Graph(id='tsne-plot', style={'height': '75vh', 'width': '100%'})
-        ], id='graph-container', style={'position': 'relative', 'padding-left': '10px'})
+        ], id='graph-container', style={'position': 'relative', 'paddingLeft': '10px'})
     ])
 ])
 
@@ -622,16 +622,16 @@ def toggle_sidebar(n_clicks, sidebar_style, graph_style):
     if n_clicks % 2 == 1:
         # Show sidebar and move graph to the right
         sidebar_style["left"] = "0vw"
-        graph_style["padding-left"] = "0vw"  # Move graph to the right when sidebar is open
-        graph_style["padding-top"] = "2.5vw"  # Add padding-top when sidebar is open
+        graph_style["paddingLeft"] = "0vw"  # Move graph to the right when sidebar is open
+        graph_style["paddingTop"] = "2.5vw"  # Add paddingTop when sidebar is open
         sidebar_style["display"] = "block"  # Show the graph
 
 
     else:
         # Hide sidebar and reset graph position
         # sidebar_style["left"] = "-17vw"
-        graph_style["padding-left"] = "0vw"  # Reset padding when sidebar is closed
-        graph_style["padding-top"] = "2.5vw"  # Add padding-top when sidebar is open
+        graph_style["paddingLeft"] = "0vw"  # Reset padding when sidebar is closed
+        graph_style["paddingTop"] = "2.5vw"  # Add paddingTop when sidebar is open
         sidebar_style["display"] = "none"  # Hide the graph
 
 

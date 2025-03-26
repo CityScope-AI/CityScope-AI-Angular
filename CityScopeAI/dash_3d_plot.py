@@ -4,9 +4,9 @@
 # Date Created: 2024-09-13
 #
 # Description: This Dash app connects to a MySQL database to retrieve demographic data
-#              from the 'census_zipcode_demographics_2022' table. It performs t-SNE 
-#              dimensionality reduction on the data and creates a 3D visualization 
-#              using Plotly. The visualization shows CBU ZIP codes in light blue and 
+#              from the 'census_zipcode_demographics_2022' table. It performs t-SNE
+#              dimensionality reduction on the data and creates a 3D visualization
+#              using Plotly. The visualization shows CBU ZIP codes in light blue and
 #              the 50 most demographically similar non-CBU ZIP codes in yellow.
 #
 # Usage: Run this Dash app to generate the 3D t-SNE plot. Ensure the environment
@@ -211,13 +211,13 @@ app.layout = html.Div([
         # Sidebar with filter options
         html.Div([
             html.Button("☰", id="toggle-button", n_clicks=0, style={
-                'position': 'absolute', 
-                'top': '10px', 
+                'position': 'absolute',
+                'top': '10px',
                 'left': '10px',
-                'font-size': '24px', 
-                'cursor': 'pointer', 
-                'background-color': 'lightgray', 
-                'z-index': '2',
+                'fontSize': '24px',
+                'cursor': 'pointer',
+                'background-color': 'lightgray',
+                'zIndex': '2',
             }),
 
             html.Div([
@@ -270,15 +270,15 @@ app.layout = html.Div([
                         html.Label("Select a CBU ZIP Code:"),
                         dcc.Dropdown(
                             id='cbu-zipcode-dropdown',
-                            options=[{'label': 'Show All (Top 50)', 'value': 'all'}] + 
+                            options=[{'label': 'Show All (Top 50)', 'value': 'all'}] +
                                     [{'label': zipcode, 'value': zipcode} for zipcode in cbu_zipcodes],
                             value='all',  # Default selection
                             placeholder="Choose a CBU ZIP Code",
                             style={'margin-bottom': '1vw'}
                         )
-                    ], style={'margin-top': '2vw'}),    
+                    ], style={'margin-top': '2vw'}),
 
-                    
+
                     html.Div(id='portfolio-section', children="No ZIP code selected.", style={
                         'margin-top': '1vw',
                         'padding': '10px',
@@ -287,15 +287,15 @@ app.layout = html.Div([
                     }),
                 ])
             ], id="sidebar", style={
-                'width': '15vw', 
-                'height': '100%', 
+                'width': '15vw',
+                'height': '100%',
                 'position': 'absolute',
-                'top': '0', 
-                'left': '-250px', 
+                'top': '0',
+                'left': '-250px',
                 'background-color': '#f8f9fa',
-                'padding': '10px', 
-                'transition': '0.3s', 
-                'z-index': '1', 
+                'padding': '10px',
+                'transition': '0.3s',
+                'zIndex': '1',
                 'overflow': 'auto'
             })
         ]),
@@ -424,7 +424,7 @@ def update_portfolio(click_data, selected_cbu_zip):
 def update_slider(selected_feature):
     # Fields that are percentage-based
     percentage_fields = ['Bachelor_Degree', 'Unemployment']
-    
+
     # Format values in thousands for these fields
     fields_in_thousands = ['Population', 'Median_Income', 'Median_Home_Value']
 
@@ -447,7 +447,7 @@ def update_slider(selected_feature):
             marks = {int(i): str(int(i)) for i in np.linspace(min_val, max_val, num=10)}
 
         label = f" {selected_feature.replace('_', ' ')} (in thousands):"
-    
+
     return min_val, max_val, value, marks, label
 
 
@@ -481,20 +481,20 @@ def update_3d_graph(selected_dimension, selected_feature, feature_range, selecte
     if selected_cbu_zip == 'all':
         # Apply feature-based filtering
         filtered_cbu_data = cbu_census_data[
-            (cbu_census_data[selected_feature] >= feature_range[0]) & 
+            (cbu_census_data[selected_feature] >= feature_range[0]) &
             (cbu_census_data[selected_feature] <= feature_range[1])
         ]
         filtered_non_cbu_data = top_50_non_cbu_census_data[
-            (top_50_non_cbu_census_data[selected_feature] >= feature_range[0]) & 
+            (top_50_non_cbu_census_data[selected_feature] >= feature_range[0]) &
             (top_50_non_cbu_census_data[selected_feature] <= feature_range[1])
         ]
 
         # Generate updated coordinates
-        filtered_cbu_coords = np.column_stack((x_data[:len(filtered_cbu_data)], 
-                                               y_data[:len(filtered_cbu_data)], 
+        filtered_cbu_coords = np.column_stack((x_data[:len(filtered_cbu_data)],
+                                               y_data[:len(filtered_cbu_data)],
                                                z_data[:len(filtered_cbu_data)]))
-        filtered_non_cbu_coords = np.column_stack((x_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)], 
-                                                   y_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)], 
+        filtered_non_cbu_coords = np.column_stack((x_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)],
+                                                   y_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)],
                                                    z_data[len(filtered_cbu_data):len(filtered_cbu_data) + len(filtered_non_cbu_data)]))
 
         # Create plot with full dataset
@@ -582,7 +582,7 @@ def update_3d_graph(selected_dimension, selected_feature, feature_range, selecte
 def preselect_zip_from_url(href):
     if not href:
         return 'all'
-    
+
     parsed_url = urlparse(href)
     query_params = parse_qs(parsed_url.query)
     selected_zip = query_params.get('selected_zip', ['all'])[0]

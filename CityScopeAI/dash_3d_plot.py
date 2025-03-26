@@ -32,8 +32,8 @@ import requests
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv(".env.local")
-API_KEY = os.getenv("TOGETHER_AI_KEY")
+# load_dotenv(".env.local")
+API_KEY = "9483b67849b146aa53e7eadd44603390bdf35c615645d3f8e036df482b5c37af"
 
 def generate_similarity_explanation(zip1, zip2, zip1_data, zip2_data):
     """

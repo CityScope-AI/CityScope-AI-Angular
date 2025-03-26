@@ -512,7 +512,7 @@ def update_3d_graph(selected_dimension, selected_feature, feature_range, selecte
 
             # Find 10 closest non-CBU ZIPs based on Euclidean distance
             distances_to_non_cbu = euclidean_distances(non_cbu_census_data_scaled, selected_cbu_scaled)
-            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:10]  # Top 10 closest non-CBU ZIPs
+            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:5]  # Top 10 closest non-CBU ZIPs
             top_10_non_cbu_data = non_cbu_census_data.iloc[top_10_indices]
 
             # Apply feature-based filtering to the selected top 10 ZIPs

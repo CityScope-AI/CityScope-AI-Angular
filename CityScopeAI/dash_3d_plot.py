@@ -23,7 +23,9 @@ from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 from dash import Dash, dcc, html, dash
-from dash.dependencies import Input, Output, State
+
+from dash import ctx, dcc, html, Input, Output, State, callback_context
+from urllib.parse import urlparse, parse_qs
 
 import os
 import requests
@@ -151,6 +153,8 @@ def generate_hover_info(data):
 cbu_hover_info = generate_hover_info(cbu_census_data)
 non_cbu_hover_info = generate_hover_info(top_50_non_cbu_census_data)
 
+
+
 # Create the initial 3D plot
 def create_3d_plot(cbu_coords, non_cbu_coords):
     trace_cbu = go.Scatter3d(
@@ -201,6 +205,7 @@ app = Dash(__name__)
 
 # App layout
 app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),  # <- Add this line
     html.Div([
 
         # Sidebar with filter options
@@ -507,7 +512,7 @@ def update_3d_graph(selected_dimension, selected_feature, feature_range, selecte
 
             # Find 10 closest non-CBU ZIPs based on Euclidean distance
             distances_to_non_cbu = euclidean_distances(non_cbu_census_data_scaled, selected_cbu_scaled)
-            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:10]  # Top 10 closest non-CBU ZIPs
+            top_10_indices = np.argsort(distances_to_non_cbu.flatten())[:5]  # Top 10 closest non-CBU ZIPs
             top_10_non_cbu_data = non_cbu_census_data.iloc[top_10_indices]
 
             # Apply feature-based filtering to the selected top 10 ZIPs
@@ -570,6 +575,21 @@ def update_3d_graph(selected_dimension, selected_feature, feature_range, selecte
     # Default fallback if nothing is selected
     return dash.no_update
 
+@app.callback(
+    Output('cbu-zipcode-dropdown', 'value'),
+    Input('url', 'href')
+)
+def preselect_zip_from_url(href):
+    if not href:
+        return 'all'
+    
+    parsed_url = urlparse(href)
+    query_params = parse_qs(parsed_url.query)
+    selected_zip = query_params.get('selected_zip', ['all'])[0]
+
+    if selected_zip in cbu_zipcodes:
+        return selected_zip
+    return 'all'
 
 # Sidebar toggle callback
 @app.callback(

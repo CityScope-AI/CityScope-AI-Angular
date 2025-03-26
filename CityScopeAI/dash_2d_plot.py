@@ -31,6 +31,9 @@ import os
 import requests
 from dotenv import load_dotenv
 
+from dash import ctx, dcc, html, Input, Output, State, callback_context
+from urllib.parse import urlparse, parse_qs
+
 # Load environment variables
 load_dotenv(".env.local")
 API_KEY = os.getenv("TOGETHER_AI_KEY")
@@ -176,8 +179,27 @@ def generate_hover_info(data):
 
 app = dash.Dash(__name__)
 
+@app.callback(
+    Output('cbu-zipcode-dropdown', 'value'),
+    Input('url', 'href')
+)
+def preselect_zip_from_url(href):
+    if not href:
+        return 'all'
+    
+    parsed_url = urlparse(href)
+    query_params = parse_qs(parsed_url.query)
+    selected_zip = query_params.get('selected_zip', ['all'])[0]
+
+    if selected_zip in cbu_zipcodes:
+        return selected_zip
+    return 'all'
+
+
+
 # App layout
 app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),  # Add to your layout
     html.Div([
 
         # Sidebar with filter options

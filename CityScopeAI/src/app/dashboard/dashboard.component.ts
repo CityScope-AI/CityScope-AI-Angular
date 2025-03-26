@@ -96,5 +96,11 @@ export class DashboardComponent implements OnInit {
         });
       });
   }
+  generateTSNE(selectedZip: string) {
+    if (!selectedZip) return;
   
+    // Redirect to Dash app with query param
+    const dashURL = `http://127.0.0.1:8050/?selected_zip=${selectedZip}`;  // adjust if hosted remotely
+    window.open(dashURL, '_blank');
+  }  
 }

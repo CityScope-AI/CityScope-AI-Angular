@@ -38,6 +38,10 @@ export class DataTablesComponent implements OnInit {
 
   table: HTMLTableElement | null = null;
 
+  /**
+   * Each row is an array of:
+   * [City, State, Zip Code, Term, Population, Income, Bachelor Degree, Median Age, Annotation]
+   */
   dataRows: string[][] = [];
   filteredRows: string[][] = [];
 

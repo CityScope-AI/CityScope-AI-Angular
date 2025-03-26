@@ -10,6 +10,9 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { PrimeNGConfig } from 'primeng/api';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
+import { SidebarComponent } from './sidebar/sidebar.component';
+
 
 @Component({
   selector: 'app-header',
@@ -22,12 +25,18 @@ import { PrimeNGConfig } from 'primeng/api';
     FormsModule,
     ToolbarModule,
     InputTextModule,
-    RippleModule
+    RippleModule,
+    SidebarModule,
+    SidebarComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit{
+  sidebarVisible: boolean = false;
+
+
+
   currentTime: string;
   isDarkMode: boolean = true;
 
@@ -50,13 +59,16 @@ export class HeaderComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.themeService.setTheme(this.selectedTheme);
     this.primengConfig.ripple = true;
-
+  }
+  logout() {
+    // Perform logout functionality here
+    console.log('Logout button clicked');
+    // Example: Redirect to the login page
+    this.router.navigate(['/login']);
   }
 
-  onThemeChange(theme: string): void {
-    this.selectedTheme = theme;
-    this.themeService.setTheme(theme);
+  openSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
   }
 }

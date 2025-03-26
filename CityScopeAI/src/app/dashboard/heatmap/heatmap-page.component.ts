@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { HeatmapComponent } from "./heatmap/heatmap.component";
 import { VoronoiMapComponent } from "./voronoi-map/voronoi-map.component"; // ✅ Ensure Basemap is imported
@@ -35,6 +35,13 @@ interface Basemap {
 
 })
 export class HeatmapPageComponent implements OnInit{
+
+  @Output() zipSelected = new EventEmitter<any>();
+
+  onZipSelectedFromMap(data: any) {
+    console.log('📡 Forwarding zipSelected from HeatmapPage to Dashboard:', data);
+    this.zipSelected.emit(data);
+  }
 
   maps: Map[] = [];
   selectedMap: Map | undefined;

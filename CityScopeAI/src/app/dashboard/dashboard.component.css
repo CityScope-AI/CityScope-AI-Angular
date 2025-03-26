@@ -1,3 +1,55 @@
-* {
-  overflow: hidden;
+
+.heatmap-with-sidebar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.heatmap-content {
+  flex: 1;
+  margin-right: 20px; /* Optional: add space between heatmap and sidebar */
+  
+}
+
+.sidebar {
+  width: 20vw;
+  height: 80vh;
+  background: #fff;
+  color: black;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+  position: relative; /* Allows the close button to position absolutely */
+}
+
+.close-btn {
+  background: red;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.tsne-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  width: 100%; /* Optional: full-width button */
+  font-size: 1rem; /* Slightly larger font */
+}
+
+
+/* Style variation for the 3D button */
+.tsne-btn-3d {
+  background-color: #f0ad4e; /* Orange-ish for 3D */
+  margin-top: 10px;
 }

@@ -7,19 +7,36 @@
       [options]="filters"
       [(ngModel)]="selectedFilter"
       optionLabel="name"
-      placeholder="Select a Filter">
+      placeholder="Select a Filter"
+      (onChange)="onFilterChange()">
     </p-dropdown>
 
-    <!-- Search bar; triggers filtering on each keystroke -->
+    <!-- Show text input when filter is non-numeric -->
     <input
+      pInputText
       pInputText
       type="text"
       [(ngModel)]="searchValue"
       (input)="applyFilter()"
       placeholder="Enter search text..."
       style="margin-bottom: 1rem;"
+      *ngIf="!isNumericFilter(selectedFilter?.name)"
     />
+
+    <!-- Show slider when filter is numeric -->
+    <!-- Use literal attribute for range instead of binding -->
+    <p-slider
+      *ngIf="isNumericFilter(selectedFilter?.name)"
+      [(ngModel)]="sliderValue"
+      range="true"
+      [min]="sliderMin"
+      [max]="sliderMax"
+      (onChange)="applyFilter()"
+      [style.width.px]="300"
+    ></p-slider>
+
     <p-button (click)="showPieChart()">Show Pie Chart</p-button>
+    <p-button (click)="downloadCSV()">Download CSV</p-button>
     <p-button (click)="downloadCSV()">Download CSV</p-button>
   </div>
 
@@ -35,6 +52,7 @@
           <th>Income</th>
           <th>Bachelor Degree</th>
           <th>Median Age</th>
+          <th>Annotation</th>
           <th>Annotation</th>
         </tr>
       </thead>

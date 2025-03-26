@@ -29,7 +29,7 @@ import * as Papa from 'papaparse';
     ButtonModule,
     DataTablesComponent,
     DemographicsComponent,
-    ZipcodeMapComponent 
+    ZipcodeMapComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
@@ -67,10 +67,10 @@ export class DashboardComponent implements OnInit {
     console.log('📥 Dashboard received ZIP selection:', data); // Add this!
     this.selectedAreaData = data;
     this.sidebarVisible = true;
-  
+
     const match = this.allDemographicRows.find(row => row.Zip_Code === data.zip_code);
     console.log('🔍 Matching row in CSV:', match); // Add this too
-  
+
     if (match) {
       this.demographicData = match;
     } else {
@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit {
       console.warn('⚠️ No demographic data found for ZIP:', data.zip_code);
     }
   }
-  
+
 
   private loadDemographics(): void {
     this.http.get('assets/data/final_census_with_images.csv', { responseType: 'text' })
@@ -86,29 +86,29 @@ export class DashboardComponent implements OnInit {
         Papa.parse(csvData, {
           header: true,
           skipEmptyLines: true,
-          complete: result => {
+          complete: (result: { data: any[]; }) => {
             this.allDemographicRows = result.data;
             console.log('✅ Final CSV loaded:', result.data);
           },
           error: (error: any) => {
             console.error('❌ CSV parsing error:', error);
-          }          
+          }
         });
       });
   }
   generateTSNE(selectedZip: string) {
     if (!selectedZip) return;
-  
+
     // Redirect to Dash app with query param
     const dashURL = `http://127.0.0.1:8050/?selected_zip=${selectedZip}`;  // adjust if hosted remotely
     window.open(dashURL, '_blank');
-  }  
+  }
 
   generate3DTSNE(selectedZip: string) {
     if (!selectedZip) return;
-  
+
     const dashURL3D = `http://127.0.0.1:8051/?selected_zip=${selectedZip}`;
     window.open(dashURL3D, '_blank');
   }
-  
+
 }

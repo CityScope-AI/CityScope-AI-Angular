@@ -62,7 +62,7 @@ export class LoginPageComponent {
     try {
       const userCredential = await signInWithEmailAndPassword(this.firebaseService.auth, this.email, this.password);
       this.messageService.add({ severity: 'success', summary: 'Login successful', detail: 'logged in' });
-      delay(13000)
+      // delay(1000)
       this.router.navigate(['/dashboard']);
     } catch (error) {
       this.messageService.add({ severity: 'error', summary: 'Login failed', detail: 'Invalid credentials. Please try again.' });

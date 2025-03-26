@@ -1,14 +1,14 @@
-# --------------------------------------------------------------------------------  
+# --------------------------------------------------------------------------------
 # Author:       Tim Allec
 # File name:    dash_2d_plot.py
 # Date Created: 2024-09-13
 #
-# Description: This script loads demographic data from a CSV file 
-#              named 'census_zipcode_demographics_2022.csv'. It performs t-SNE 
-#              dimensionality reduction to project the data into 2D space and creates 
-#              a 2D visualization using Plotly. The visualization shows CBU ZIP codes 
-#              in light blue and the 100 most demographically similar non-CBU ZIP codes 
-#              in yellow, with their most similar CBU ZIP code and similarity score 
+# Description: This script loads demographic data from a CSV file
+#              named 'census_zipcode_demographics_2022.csv'. It performs t-SNE
+#              dimensionality reduction to project the data into 2D space and creates
+#              a 2D visualization using Plotly. The visualization shows CBU ZIP codes
+#              in light blue and the 100 most demographically similar non-CBU ZIP codes
+#              in yellow, with their most similar CBU ZIP code and similarity score
 #              displayed on hover.
 #
 # Usage: Execute this script to generate the 2D t-SNE plot. Ensure the CSV file
@@ -113,7 +113,7 @@ cbu_zipcodes = [
 # filter and find CBU zip codes within the dataset
 cbu_census_data = census_data[census_data['Zip_Code'].isin(cbu_zipcodes)]
 
-features = ['Population', 'Median_Income', 'Bachelor_Degree', 'Graduate_Professional_Degree', 
+features = ['Population', 'Median_Income', 'Bachelor_Degree', 'Graduate_Professional_Degree',
             'White_Alone', 'Black_Alone', 'Hispanic_Latino', 'Unemployment', 'Median_Home_Value']
 
 # standardize
@@ -186,7 +186,7 @@ app = dash.Dash(__name__)
 def preselect_zip_from_url(href):
     if not href:
         return 'all'
-    
+
     parsed_url = urlparse(href)
     query_params = parse_qs(parsed_url.query)
     selected_zip = query_params.get('selected_zip', ['all'])[0]
@@ -205,17 +205,17 @@ app.layout = html.Div([
         # Sidebar with filter options
         html.Div([
             html.Button("☰", id="toggle-button", n_clicks=0, style={
-                'position': 'absolute', 
-                'top': '10px', 
+                'position': 'absolute',
+                'top': '10px',
                 'left': '10px',
-                'font-size': '24px', 
-                'cursor': 'pointer', 
-                'background-color': 'lightgray', 
+                'font-size': '24px',
+                'cursor': 'pointer',
+                'background-color': 'lightgray',
                 'z-index': '2',
             }),
 
             html.Div([
-                # Adding margin-top using wrapper Div
+                # Adding marginTop using wrapper Div
                 html.Div([
                     # Demographic Dimension Dropdown
                     html.Label("Select Demographic Dimension:"),
@@ -230,7 +230,7 @@ app.layout = html.Div([
                         ],
                         value='generalized'  # Default value
                     )
-                ], style={'margin-top': '3vw'}),  # Add spacing above the dropdown
+                ], style={'marginTop': '3vw'}),  # Add spacing above the dropdown
 
                 html.Div([
                     html.Div([
@@ -246,7 +246,7 @@ app.layout = html.Div([
                             ],
                             value='Population'  # Default value
                         )
-                    ], style={'margin-top': '1vw'}),  # Add spacing above the dropdown
+                    ], style={'marginTop': '1vw'}),  # Add spacing above the dropdown
 
                     html.Div([
                         html.Label(id='slider-label', children="Filter by Population Range:"),
@@ -258,38 +258,38 @@ app.layout = html.Div([
                             marks={int(i): str(int(i)) for i in np.linspace(0, 1000000, num=10)},
                             value=[0, 1000000]
                         )
-                    ], style={'margin-top': '1vw'}),  # Add spacing above the slider
+                    ], style={'marginTop': '1vw'}),  # Add spacing above the slider
 
                     html.Div([
                         html.Label("Select a CBU ZIP Code:"),
                         dcc.Dropdown(
                             id='cbu-zipcode-dropdown',
-                            options=[{'label': 'Show All (Top 50)', 'value': 'all'}] + 
+                            options=[{'label': 'Show All (Top 50)', 'value': 'all'}] +
                                     [{'label': zipcode, 'value': zipcode} for zipcode in cbu_zipcodes],
                             value='all',  # Default selection
                             placeholder="Choose a CBU ZIP Code",
-                            style={'margin-bottom': '1vw'}
+                            style={'marginBottom': '1vw'}
                         )
-                    ], style={'margin-top': '2vw'}),    
+                    ], style={'marginTop': '2vw'}),
 
-                    
+
                     html.Div(id='portfolio-section', children="No ZIP code selected.", style={
-                        'margin-top': '1vw',
+                        'marginTop': '1vw',
                         'padding': '10px',
                         'border': '1px solid #ccc',
                         'background-color': '#f8f9fa'
                     }),
                 ])
             ], id="sidebar", style={
-                'width': '15vw', 
-                'height': '100%', 
+                'width': '15vw',
+                'height': '100%',
                 'position': 'absolute',
-                'top': '0', 
-                'left': '-250px', 
+                'top': '0',
+                'left': '-250px',
                 'background-color': '#f8f9fa',
-                'padding': '10px', 
-                'transition': '0.3s', 
-                'z-index': '1', 
+                'padding': '10px',
+                'transition': '0.3s',
+                'z-index': '1',
                 'overflow': 'auto'
             })
         ]),
@@ -372,7 +372,7 @@ def update_portfolio(click_data, selected_cbu_zip):
     ]
 
     if image_url:
-        portfolio_content.append(html.Img(src=image_url, style={'width': '100%', 'height': 'auto', 'margin-bottom': '10px'}))
+        portfolio_content.append(html.Img(src=image_url, style={'width': '100%', 'height': 'auto', 'marginBottom': '10px'}))
 
     portfolio_content.extend([
         html.P(f"City: {city_name}"),
@@ -422,7 +422,7 @@ def update_portfolio(click_data, selected_cbu_zip):
 def update_slider(selected_feature):
     # Fields that are percentage-based
     percentage_fields = ['Bachelor_Degree', 'Unemployment']
-    
+
     # Format values in thousands for these fields
     fields_in_thousands = ['Population', 'Median_Income', 'Median_Home_Value']
 
@@ -445,7 +445,7 @@ def update_slider(selected_feature):
             marks = {int(i): str(int(i)) for i in np.linspace(min_val, max_val, num=10)}
 
         label = f" {selected_feature.replace('_', ' ')} (in thousands):"
-    
+
     return min_val, max_val, value, marks, label
 
 
@@ -509,7 +509,7 @@ def update_graph(selected_dimension, selected_feature, feature_range, selected_c
             x=x_data[:len(filtered_cbu_data)],
             y=y_data[:len(filtered_cbu_data)],
             mode='markers+text',
-            marker=dict(size=10, color='rgb(0, 213, 240)', opacity=0.8), 
+            marker=dict(size=10, color='rgb(0, 213, 240)', opacity=0.8),
             text=filtered_cbu_data['Zip_Code'],
             hoverinfo='text',
             hovertext=cbu_hover_info,
@@ -607,7 +607,7 @@ def update_graph(selected_dimension, selected_feature, feature_range, selected_c
 
 
 
-   
+
 
 
 

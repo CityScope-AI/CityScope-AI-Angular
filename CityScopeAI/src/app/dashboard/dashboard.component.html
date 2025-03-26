@@ -39,9 +39,20 @@
                     <p><strong>Unemployment:</strong> {{ demographicData.Unemployment | percent:'1.0-0' }}</p>
                     <p><strong>Below Poverty Level:</strong> {{ demographicData.Below_Poverty_Level | percent:'1.0-0' }}</p>                    
                     <p><strong>Median Home Value:</strong> ${{ demographicData.Median_Home_Value }}</p>
-                    <button (click)="generateTSNE(selectedAreaData?.zip_code)" class="tsne-btn">
-                      🔍 Generate t-SNE
-                    </button>                    
+                    <button 
+                    class="tsne-btn"
+                    [disabled]="!selectedAreaData?.zip_code"
+                    (click)="generateTSNE(selectedAreaData.zip_code)">
+                    🟦 Generate 2D t-SNE
+                  </button>
+                  
+                  <button 
+                    class="tsne-btn tsne-btn-3d"
+                    [disabled]="!selectedAreaData?.zip_code"
+                    (click)="generate3DTSNE(selectedAreaData.zip_code)">
+                    🟨 Generate 3D t-SNE
+                  </button>
+                          
                     <!-- Add more fields as needed -->
                   </div>
                 </div>                

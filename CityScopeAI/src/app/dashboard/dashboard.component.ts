@@ -103,4 +103,12 @@ export class DashboardComponent implements OnInit {
     const dashURL = `http://127.0.0.1:8050/?selected_zip=${selectedZip}`;  // adjust if hosted remotely
     window.open(dashURL, '_blank');
   }  
+
+  generate3DTSNE(selectedZip: string) {
+    if (!selectedZip) return;
+  
+    const dashURL3D = `http://127.0.0.1:8051/?selected_zip=${selectedZip}`;
+    window.open(dashURL3D, '_blank');
+  }
+  
 }

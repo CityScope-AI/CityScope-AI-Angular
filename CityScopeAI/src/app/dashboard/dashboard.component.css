@@ -47,3 +47,9 @@
   font-size: 1rem; /* Slightly larger font */
 }
 
+
+/* Style variation for the 3D button */
+.tsne-btn-3d {
+  background-color: #f0ad4e; /* Orange-ish for 3D */
+  margin-top: 10px;
+}

@@ -17,8 +17,10 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  getAuth
 } from 'firebase/auth';
+import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { FirebaseService } from '../../../firebase.service'; // adjust the path as needed
 import { delay } from 'rxjs';
 
@@ -70,18 +72,34 @@ export class LoginPageComponent {
     }
   }
 
-  async signUp() {
+  async signUp(email: string, password: string): Promise<void> {
+    const auth = getAuth();
+    const db = getFirestore();
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        this.firebaseService.auth,
-        this.email,
-        this.password
-      );
-      console.log('User signed up:', userCredential);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // ✅ Create Firestore user document
+      if (user) {
+        console.log('Creating user doc in Firestore...');
+
+        await setDoc(doc(db, 'users', user.uid), {
+          profileImageUrl: '', // From Firebase Storage
+          email: user.email,
+          createdAt: serverTimestamp()
+        }, { merge: true });
+        console.log('✅ Document successfully created');
+
+      }
+
+      console.log('User created and added to Firestore:', user.uid);
+      // You can now navigate to dashboard or show success message
       this.router.navigate(['/dashboard']);
+
     } catch (error) {
-      this.messageService.add({ severity: 'error', summary: 'Login failed', detail: 'Invalid credentials. Please try again.' });
-      console.error('Sign up error:', error);
+      console.error('Sign up failed:', error);
+      // Show error to user
     }
   }
 

@@ -1,209 +1,192 @@
-# -*- coding: utf-8 -*-
-
-import requests
-from bs4 import BeautifulSoup
+import csv
 import os
 import glob
+import time
+import concurrent.futures
+import requests
+from bs4 import BeautifulSoup
 
-# Base URL for Wikipedia
-BASE_URL = "https://en.wikipedia.org"
+WIKIPEDIA_API_URL = "https://en.wikipedia.org/w/api.php"
+WIKIPEDIA_PAGE_URL = "https://en.wikipedia.org/wiki/"
 
-# Define headers to mimic a browser and identify your scraper
-headers = {
-    'User-Agent': 'Mozilla/5.0 (compatible; MyScraper/1.0; +http://example.com/my-scraper)'
-}
-
-def get_category_pages(category_url, visited=None):
+def search_wikipedia(query, retries=3, delay=2):
     """
-    Recursively scrapes a Wikipedia category page for city links,
-    including those from any subcategories and paginated pages.
+    Searches Wikipedia using the MediaWiki API for a given query.
+    Returns the title of the first result or None if no result is found.
     """
-    if visited is None:
-        visited = set()
-    if category_url in visited:
-        return []
-    visited.add(category_url)
-    
-    try:
-        response = requests.get(category_url, headers=headers)
-    except Exception as e:
-        print(f"Error accessing {category_url}: {e}")
-        return []
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    pages = []
-    
-    # Get direct pages from the "mw-pages" section
-    pages_div = soup.find("div", id="mw-pages")
-    if pages_div:
-        for ul in pages_div.find_all("ul"):
-            for li in ul.find_all("li"):
-                a = li.find("a")
-                if a and a.get("href"):
-                    full_url = BASE_URL + a["href"]
-                    pages.append(full_url)
-        
-        # Check for a "next page" link in the pagination navigation
-        nav_div = pages_div.find("div", class_="mw-content-ltr")
-        if nav_div:
-            next_link = nav_div.find("a", string="next page")
-            if next_link and next_link.get("href"):
-                next_page_url = BASE_URL + next_link["href"]
-                print(f"Found pagination link: {next_page_url}")
-                pages.extend(get_category_pages(next_page_url, visited))
-    
-    # Process subcategories
-    subcat_div = soup.find("div", id="mw-subcategories")
-    if subcat_div:
-        for ul in subcat_div.find_all("ul"):
-            for li in ul.find_all("li"):
-                a = li.find("a")
-                if a and a.get("href"):
-                    subcat_url = BASE_URL + a["href"]
-                    pages.extend(get_category_pages(subcat_url, visited))
-    
-    return pages
-
-def get_city_links_from_georgia_list(url):
-    """
-    Scrapes the Georgia list page ("List_of_municipalities_in_Georgia_(U.S._state)")
-    to extract city links.
-    """
-    try:
-        response = requests.get(url, headers=headers)
-    except Exception as e:
-        print(f"Error accessing {url}: {e}")
-        return []
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    city_links = []
-    # Assuming the page contains a wikitable listing the municipalities
-    table = soup.find("table", class_="wikitable")
-    if table:
-        rows = table.find_all("tr")
-        # Skip the header row
-        for row in rows[1:]:
-            cells = row.find_all("td")
-            if cells:
-                # Assume the first cell holds the municipality name with a link
-                a = cells[0].find("a")
-                if a and a.get("href"):
-                    full_url = BASE_URL + a["href"]
-                    city_links.append(full_url)
-    else:
-        print("No wikitable found on the Georgia list page.")
-    return city_links
-
-def get_all_city_links_by_state():
-    """
-    Iterates through a list of US states and for each state, checks:
-      - For Georgia, use the special list page.
-      - For all others, check both "Cities_in_{State}" and 
-        "Incorporated_cities_and_towns_in_{State}" categories.
-    Combines the results (removing duplicates) and returns a dictionary
-    mapping state names to a list of city links.
-    """
-    states = [
-        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
-        "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
-        "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
-        "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New_Hampshire",
-        "New_Jersey", "New_Mexico", "New_York_(state)", "North_Carolina", "North_Dakota", "Ohio",
-        "Oklahoma", "Oregon", "Pennsylvania", "Rhode_Island", "South_Carolina", "South_Dakota",
-        "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West_Virginia",
-        "Wisconsin", "Wyoming"
-    ]
-    state_city_links = {}
-    for state in states:
-        links = []
-        if state == "Georgia":
-            georgia_url = "https://en.wikipedia.org/wiki/List_of_municipalities_in_Georgia_(U.S._state)"
-            print(f"Scraping Georgia using special list page: {georgia_url}")
-            links = get_city_links_from_georgia_list(georgia_url)
-            print(f"Found {len(links)} cities for Georgia")
-        else:
-            # List the two category names to try for each state.
-            category_names = [
-                f"Cities_in_{state}",
-                f"Incorporated_cities_and_towns_in_{state}"
-            ]
-            for category_name in category_names:
-                category_url = f"{BASE_URL}/wiki/Category:{category_name}"
-                print(f"Scraping {state} using category {category_name}: {category_url}")
-                new_links = get_category_pages(category_url)
-                print(f"Found {len(new_links)} cities in category {category_name} for {state}")
-                links.extend(new_links)
-        # Deduplicate the list of links
-        unique_links = list(set(links))
-        print(f"Total unique cities found for {state}: {len(unique_links)}")
-        state_city_links[state] = unique_links
-    return state_city_links
-
-def get_cover_image(city_url):
-    """
-    Given a city's Wikipedia URL, fetch the page and extract the cover image URL 
-    from the infobox. Uses a CSS selector to match any table that includes "infobox" as a class.
-    """
-    response = requests.get(city_url, headers=headers)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    infobox = soup.select_one("table.infobox")
-    if infobox:
-        img = infobox.find("img")
-        if img and img.get("src"):
-            src = img["src"]
-            if src.startswith("//"):
-                src = "https:" + src
-            return src
+    params = {
+        "action": "query",
+        "list": "search",
+        "srsearch": query,
+        "format": "json"
+    }
+    for attempt in range(1, retries+1):
+        try:
+            response = requests.get(WIKIPEDIA_API_URL, params=params, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            search_results = data.get("query", {}).get("search", [])
+            if search_results:
+                title = search_results[0]["title"]
+                return title
+            else:
+                return None
+        except Exception as e:
+            print(f"Error searching Wikipedia for '{query}', attempt {attempt}: {e}")
+            if attempt < retries:
+                time.sleep(delay)
     return None
 
-def download_image(url, save_path):
+def get_cover_image_from_page(title, retries=3, delay=2):
     """
-    Downloads an image from the URL and saves it to the specified path.
+    Given a Wikipedia page title, retrieves the page and extracts the first image from the infobox.
+    Returns the full image URL (or None if not found).
     """
+    page_url = WIKIPEDIA_PAGE_URL + title.replace(" ", "_")
+    for attempt in range(1, retries+1):
+        try:
+            response = requests.get(page_url, timeout=10)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, "html.parser")
+            # Look for a table with class 'infobox'
+            infobox = soup.find("table", class_="infobox")
+            if infobox:
+                img = infobox.find("img")
+                if img and img.get("src"):
+                    src = img["src"]
+                    if src.startswith("//"):
+                        src = "https:" + src
+                    elif src.startswith("/"):
+                        src = "https://en.wikipedia.org" + src
+                    return src
+            return None
+        except Exception as e:
+            print(f"Error retrieving page '{title}' on attempt {attempt}: {e}")
+            if attempt < retries:
+                time.sleep(delay)
+    return None
+
+def download_image(url, save_path, timeout=15):
+    """
+    Downloads the image from the given URL and saves it to save_path.
+    """
+    # Use a compliant User-Agent (change the URL/email to your own details)
+    headers = {
+        "User-Agent": "MyBot/1.0 (https://example.com/my-bot-info; myemail@example.com)"
+    }
     try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            with open(save_path, "wb") as f:
-                f.write(response.content)
-            print("Downloaded image to {}".format(save_path))
-        else:
-            print("Failed to download image from {}".format(url))
+        response = requests.get(url, stream=True, timeout=timeout, headers=headers)
+        response.raise_for_status()
+        with open(save_path, "wb") as f:
+            for chunk in response.iter_content(1024):
+                f.write(chunk)
+        print(f"Downloaded image to {save_path}")
     except Exception as e:
-        print("Error downloading image: {}".format(e))
+        print(f"Error downloading image from {url}: {e}")
+
+
+def rename_downloaded_image(target_dir, zip_code):
+    """
+    Checks if the downloaded file in target_dir is already named with the zip_code.
+    If not, renames the first file in the directory.
+    """
+    files = glob.glob(os.path.join(target_dir, "*"))
+    if files:
+        file_path = files[0]
+        base_name = os.path.basename(file_path)
+        if base_name.startswith(zip_code):
+            return  # Already correctly named.
+        _, ext = os.path.splitext(file_path)
+        new_name = f"{zip_code}{ext}"
+        new_path = os.path.join(target_dir, new_name)
+        try:
+            os.rename(file_path, new_path)
+            print(f"Renamed {file_path} to {new_path}")
+        except Exception as e:
+            print(f"Error renaming {file_path}: {e}")
+
+def process_zip(row, output_folder):
+    """
+    Processes a single CSV row:
+      - Checks if valid data exists,
+      - Creates a folder for the state,
+      - Skips if the ZIP code has already been processed,
+      - Searches Wikipedia for the query "ZIP Code {zip_code}",
+      - Retrieves the cover image from the resulting page,
+      - Downloads the image and names it with the ZIP code.
+    """
+    zip_code = row["Zip_Code"].strip()
+    city = row["City"].strip()
+    state = row["State"].strip()
+
+    # Validate: skip if missing or if city is unknown.
+    if not zip_code or not state or city.lower() == "unknown city":
+        print(f"Skipping row due to missing/unknown data: {row}")
+        return
+
+    # Create state folder (spaces replaced by underscores)
+    state_folder = state.replace(" ", "_")
+    target_dir = os.path.join(output_folder, state_folder)
+    os.makedirs(target_dir, exist_ok=True)
+
+    # If an image for this ZIP code already exists, skip.
+    pattern = os.path.join(target_dir, f"{zip_code}.*")
+    if glob.glob(pattern):
+        print(f"Image for {zip_code} already exists in {state}. Skipping.")
+        return
+
+    # Build the query string. You can choose to use just the ZIP code or add a prefix.
+    query = f"ZIP Code {zip_code}"
+    print(f"Processing {zip_code} with query: '{query}'")
+
+    title = search_wikipedia(query)
+    if not title:
+        print(f"No Wikipedia page found for query '{query}'")
+        return
+
+    print(f"Found page '{title}' for ZIP {zip_code}")
+
+    image_url = get_cover_image_from_page(title)
+    if not image_url:
+        print(f"No cover image found on the Wikipedia page '{title}' for ZIP {zip_code}")
+        return
+
+    # Determine a safe file extension
+    ext = os.path.splitext(image_url)[1]
+    if not ext or len(ext) > 5:
+        ext = ".jpg"
+    save_path = os.path.join(target_dir, f"{zip_code}{ext}")
+
+    download_image(image_url, save_path)
+
+    # If needed, you could also rename the file after download.
+    rename_downloaded_image(target_dir, zip_code)
+
+    # Short delay to throttle requests.
+    time.sleep(1)
 
 def main():
-    # Create a top-level folder to save images
-    base_folder = "city_images"
-    os.makedirs(base_folder, exist_ok=True)
-    
-    # Get a dictionary mapping each state to its list of city links from the combined sources
-    state_city_links = get_all_city_links_by_state()
-    print("Total states processed: {}".format(len(state_city_links)))
-    
-    # Process each state individually
-    for state, city_links in state_city_links.items():
-        # Create a subfolder for the state
-        state_folder = os.path.join(base_folder, state)
-        os.makedirs(state_folder, exist_ok=True)
-        print(f"\nProcessing {len(city_links)} cities for state {state}")
-        for city_url in city_links:
-            # Determine city name from URL (e.g., Los_Angeles)
-            city_name = city_url.split("/")[-1]
-            # Check if the file for this city already exists (regardless of extension)
-            pattern = os.path.join(state_folder, f"{city_name}.*")
-            if glob.glob(pattern):
-                print(f"Skipping {city_name}: file already exists.")
-                continue
+    csv_file = r"/mnt/c/Users/User/Desktop/Cappystone/Real-Capstone/CityScope-AI-Angular/CityScopeAI/src/assets/data/zip_city_state_with_images_updated.csv"
 
-            print("\nProcessing {}".format(city_url))
-            image_url = get_cover_image(city_url)
-            if image_url:
-                parts = image_url.split(".")
-                file_extension = parts[-1].split("?")[0] if len(parts) > 1 else "jpg"
-                save_filepath = os.path.join(state_folder, "{}.{}".format(city_name, file_extension))
-                download_image(image_url, save_filepath)
-            else:
-                print("No cover image found for this city.")
+    output_folder = "us_state_images"
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Read CSV rows.
+    with open(csv_file, newline='', encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+    total = len(rows)
+    print(f"Total rows to process: {total}")
+
+    # Process rows concurrently (15 workers).
+    max_workers = 15
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(process_zip, row, output_folder) for row in rows]
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                print(f"Error processing a row: {e}")
 
 if __name__ == "__main__":
     main()

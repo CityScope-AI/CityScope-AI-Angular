@@ -13,38 +13,33 @@ base_image_dir = r"/mnt/c/Users/User/Desktop/Cappystone/Real-Capstone/CityScope-
 
 df = pd.read_csv(input_csv, dtype=str)
 
-# Ensure the columns are present
 required_cols = ["Zip_Code", "City", "State", "Image_Path"]
-missing_cols = [col for col in required_cols if col not in df.columns]
-if missing_cols:
-    raise ValueError(f"Missing column(s) in the CSV: {missing_cols}")
+for col in required_cols:
+    if col not in df.columns:
+        raise ValueError(f"Missing '{col}' in CSV.")
 
-# Iterate over each row to find the images if they exist
 for index, row in df.iterrows():
-    zip_code = row["Zip_Code"]
-    state = row["State"]
+    zip_code = (row["Zip_Code"] or "").strip()  # strip spaces
+    state = (row["State"] or "").strip()
 
-    # Skip if State is blank or NaN (we wouldn't know which folder)
-    if not state or pd.isna(state):
+    # If state is empty, skip
+    if not state:
         continue
 
-    # Build a glob pattern:
-    #   base_image_dir / state / zip_code / *.*
-    # Adjust the pattern to target the specific file naming or extension you expect
-    zip_image_dir = os.path.join(base_image_dir, state, zip_code)
-    pattern = os.path.join(zip_image_dir, "*")
+    # Build pattern: e.g. .../Massachusetts/01602.*
+    pattern = os.path.join(base_image_dir, state, f"{zip_code}.*")
 
-    # Search for any file inside that {State}/{Zip_Code} folder
+    # Debug prints
+    print(f"Row {index}: ZIP='{zip_code}', State='{state}'")
+    print("  Searching with glob pattern:", pattern)
+
     matches = glob.glob(pattern)
+    print("  Matches found:", matches)
 
-    # If at least one match is found, pick the first
     if matches:
         df.at[index, "Image_Path"] = matches[0]
     else:
-        # No image found => keep "No image available"
         df.at[index, "Image_Path"] = "No image available"
 
-# Write out the updated CSV
 df.to_csv(output_csv, index=False)
-
-print(f"Merged CSV with image paths written to: {output_csv}")
+print(f"Merged CSV saved to {output_csv}")
